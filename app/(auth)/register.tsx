@@ -14,7 +14,7 @@ export default function RegisterScreen() {
     const [focusedInput, setFocusedInput] = useState<string | null>(null);
     
     return (
-        <SafeAreaView style={GlobalStyles.screen}>
+        <SafeAreaView style={GlobalStyles.screen} edges={['top']}>
             <KeyboardAwareScrollView
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="handled"

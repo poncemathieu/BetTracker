@@ -38,6 +38,7 @@ export const GlobalStyles = StyleSheet.create({
     alignItems: 'center',
   },
   btnPrimaryText: {
+    marginBottom: -5,
     fontSize: 15,
     fontWeight: '700',
     color: '#fff',
@@ -100,6 +101,7 @@ export const GlobalStyles = StyleSheet.create({
   divText: {
     fontSize: 12,
     color: Colors.text3,
+    marginTop: -10,
   },
 
 });
