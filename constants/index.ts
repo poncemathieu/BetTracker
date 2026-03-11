@@ -12,7 +12,7 @@ export const Colors = {
     cyan: '#00d4a8',
     yellow: '#f59e0b',
     red: '#ef4444',
-    green: '#22c55e',
+    green: '#04a485',
 
     text: '#ffffff',
     text2: '#94a3b8',
