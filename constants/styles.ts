@@ -17,6 +17,7 @@ export const GlobalStyles = StyleSheet.create({
     letterSpacing: 1.5,
     color: Colors.text3,
     marginBottom: 6,
+    marginTop: 6,
   },
 
   // Inputs
@@ -28,20 +29,25 @@ export const GlobalStyles = StyleSheet.create({
     padding: 14,
     color: Colors.text,
     fontSize: 14,
+    marginTop: 5,
+    marginBottom: 5,
   },
 
   // Boutons
   btnPrimary: {
-    backgroundColor: Colors.purple,
-    borderRadius: 16,
-    padding: 17,
-    alignItems: 'center',
+     width: '100%',
+     backgroundColor: Colors.purple,
+     borderRadius: 16,
+     paddingVertical: 16,
+     alignItems: 'center',
+
   },
   btnPrimaryText: {
-    marginBottom: -5,
-    fontSize: 15,
-    fontWeight: '700',
     color: '#fff',
+    fontSize: 16,
+    alignItems: 'center',
+    fontWeight: '700',
+
   },
   btnSecondary: {
     flex: 1,
@@ -56,6 +62,10 @@ export const GlobalStyles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: Colors.text,
+  },
+  btnSection: {
+    gap: 16,
+    alignItems: 'center',
   },
 
   // Tab switcher

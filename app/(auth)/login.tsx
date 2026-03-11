@@ -63,6 +63,11 @@ export default function LoginScreen() {
           <Text style={GlobalStyles.divText}>ou continuer avec</Text>
           <View style={GlobalStyles.divLine} />
         </View>
+        <TouchableOpacity onPress={() => router.push('/(onboarding)/welcome')}>
+  <Text style={{ color: Colors.purple2, textAlign: 'center', marginTop: 12 }}>
+    Voir onboarding (test)
+  </Text>
+</TouchableOpacity>
 
         {/* OAuth */}
         <View style={styles.socialRow}>
