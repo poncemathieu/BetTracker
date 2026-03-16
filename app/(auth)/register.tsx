@@ -41,7 +41,7 @@ export default function RegisterScreen() {
                                 <View style={styles.inputHalf}>
                                     <Text style={GlobalStyles.label}>PRÉNOM</Text>
                                     <TextInput
-                                    style={[GlobalStyles.input, focusedInput === 'firstName' && styles.inputFocused]}
+                                    style={[GlobalStyles.input, focusedInput === 'firstName' && GlobalStyles.inputFocused]}
                                     placeholder="Votre prénom"
                                     placeholderTextColor={Colors.text3}
                                     onFocus={() => setFocusedInput('firstName')}
@@ -51,7 +51,7 @@ export default function RegisterScreen() {
                                 <View style={styles.inputHalf}>
                                     <Text style={GlobalStyles.label}>NOM</Text>
                                     <TextInput
-                                    style={[GlobalStyles.input, focusedInput === 'lastName' && styles.inputFocused]}
+                                    style={[GlobalStyles.input, focusedInput === 'lastName' && GlobalStyles.inputFocused]}
                                     placeholder="Votre nom"
                                     placeholderTextColor={Colors.text3}
                                     onFocus={() => setFocusedInput('lastName')}
@@ -63,7 +63,7 @@ export default function RegisterScreen() {
                                 <View>
                                     <Text style={GlobalStyles.label}>EMAIL</Text>
                                     <TextInput
-                                        style={[GlobalStyles.input, focusedInput === 'email' && styles.inputFocused]}
+                                        style={[GlobalStyles.input, focusedInput === 'email' && GlobalStyles.inputFocused]}
                                         placeholder="Votre adresse email"
                                         placeholderTextColor={Colors.text3}
                                         keyboardType="email-address"
@@ -75,7 +75,7 @@ export default function RegisterScreen() {
                                 <View>
                                     <Text style={GlobalStyles.label}>MOT DE PASSE</Text>
                                     <TextInput
-                                        style={[GlobalStyles.input, focusedInput === 'password' && styles.inputFocused]}
+                                        style={[GlobalStyles.input, focusedInput === 'password' && GlobalStyles.inputFocused]}
                                         placeholder="Votre mot de passe"
                                         placeholderTextColor={Colors.text3}
                                         secureTextEntry
@@ -86,7 +86,7 @@ export default function RegisterScreen() {
                                 <View>
                                     <Text style={GlobalStyles.label}>CONFIRMER LE MOT DE PASSE</Text>
                                     <TextInput
-                                        style={[GlobalStyles.input, focusedInput === 'confirmPassword' && styles.inputFocused]}
+                                        style={[GlobalStyles.input, focusedInput === 'confirmPassword' && GlobalStyles.inputFocused]}
                                         placeholder="Confirmez votre mot de passe"
                                         placeholderTextColor={Colors.text3}
                                         secureTextEntry
@@ -204,9 +204,5 @@ const styles = StyleSheet.create({
     fontSize: 12, 
     color: Colors.text3, 
     textAlign: 'center'
-  },
-  inputFocused: {
-        borderColor: Colors.purple2,
-        backgroundColor: `${Colors.purple2}10` // version transparente de la couleur pour un effet de surbrillance
   },
 });
