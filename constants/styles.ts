@@ -32,6 +32,10 @@ export const GlobalStyles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
   },
+  inputFocused: {
+      borderColor: Colors.purple2,
+      backgroundColor: `${Colors.purple2}10` // version transparente de la couleur pour un effet de surbrillance
+  },
 
   // Boutons
   btnPrimary: {

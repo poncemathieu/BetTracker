@@ -38,12 +38,12 @@ export default function DashboardScreen() {
           style={styles.bankrollCard}
         >
             <Text style={styles.bKName}>BANKROLL ACTUELLE</Text>
-            <Text style={styles.bankrollText}>1000 €</Text>
-            <Text style={styles.startSold}>Départ : 10€</Text>
+            <Text style={styles.bankrollText}>2340,50 €</Text>
+            <Text style={styles.startSold}>Départ : 2000€</Text>
 
             <View style={styles.statsRow}>
             <View style={styles.statItem}>
-              <Text style={{color: Colors.green, fontWeight: '600'}}>+340 €</Text>
+              <Text style={{color: Colors.green, fontWeight: '600'}}>+340,50 €</Text>
               <Text style={styles.statLabel}>PROFIT TOTAL</Text>
             </View>
             <View style={styles.separator}/>
@@ -76,7 +76,7 @@ export default function DashboardScreen() {
           </View>
           <View style={styles.statCard}>
             <Text style={{fontSize: 22}}>💰</Text>
-            <Text style={styles.statValuePositive}>+128 €</Text>
+            <Text style={styles.statValuePositive}>+128,00 €</Text>
             <Text style={styles.statLabel}>Profit ce mois</Text>
           </View>
           <View style={styles.statCard}>

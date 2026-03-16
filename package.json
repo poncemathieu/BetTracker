@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
+    "@react-native-community/datetimepicker": "8.6.0",
     "@tamagui/babel-plugin": "^2.0.0-rc.21",
     "@tamagui/config": "^2.0.0-rc.21",
     "@tamagui/core": "^2.0.0-rc.21",
@@ -22,6 +23,7 @@
     "react": "19.2.0",
     "react-dom": "^19.2.4",
     "react-native": "0.83.2",
+    "react-native-calendars": "^1.1314.0",
     "react-native-gesture-handler": "~2.30.0",
     "react-native-gifted-charts": "^1.4.75",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
