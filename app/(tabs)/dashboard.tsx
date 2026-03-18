@@ -190,102 +190,102 @@ const styles = StyleSheet.create({
     color: Colors.text3,
   },
   separator: {
-  width: 1,
-  height: '100%',
-  backgroundColor: 'rgba(255,255,255,0.1)',
+    width: 1,
+    height: '100%',
+    backgroundColor: 'rgba(255,255,255,0.1)',
  },
-statsRow: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: 24,
-  marginTop: 20,
-},
-statItem: {
-  alignItems: 'center',
-},
-title: {
-  fontSize: 15,
-  fontWeight: 'bold',
-  color: Colors.text,
-  marginTop: 2,
-  marginLeft: 12,
-  letterSpacing: -0.5,
-},
-statsGrid: {
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  gap: 10,
-  padding: 16,
-},
-statCard: {
-  width: '47.5%',
-  backgroundColor: Colors.surface2,
-  borderWidth: 1,
-  borderColor: Colors.border,
-  borderRadius: 18,
-  padding: 16,
-},
-statValue: {
-  color: Colors.purple,
-  fontWeight: 600,
-  fontSize: 20
-},
-statValuePositive: {
-  fontSize: 20,
-  color: Colors.green,
-},
-statValueCroissance: {
-   color: Colors.purple,
-  fontWeight: 600,
-},
-statWin: {
-  color: Colors.yellow,
-  fontWeight: 600,
-  fontSize: 20
-},
-statLabel: {
-  fontSize: 10,
-  color: Colors.text2,
-},
-filterRow: {
-  flexDirection: 'row-reverse',
-  gap: 8,
-  marginBottom: 8,
-  marginRight: 8,
-},
-filterChip: {
-  paddingHorizontal: 12,
-  paddingVertical: 6,
-  borderRadius: 8,
-  backgroundColor: Colors.surface2,
-  borderWidth: 1,
-  borderColor: Colors.border,
-},
-filterChipActive: {
-  backgroundColor: Colors.purple,
-  borderColor: Colors.purple,
-},
-filterText: {
-  fontSize: 12,
-  fontWeight: '600',
-  color: Colors.text3,
-},
-filterTextActive: {
-  color: '#fff',
-},
-chartContainer: {
-  marginTop: 8,
-  marginBottom: 16,
-  height: 205,
-  overflow: 'hidden'
-},
-cardGraphBankroll: {
-  backgroundColor: Colors.surface2,
-  borderWidth: 1,
-  borderColor: Colors.border,
-  borderRadius: 18,
-  paddingVertical: 16,
-  margin: 16,
-},
+  statsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 24,
+    marginTop: 20,
+  },
+  statItem: {
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: Colors.text,
+    marginTop: 2,
+    marginLeft: 12,
+    letterSpacing: -0.5,
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    padding: 16,
+  },
+  statCard: {
+    width: '47.5%',
+    backgroundColor: Colors.surface2,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: 18,
+    padding: 16,
+  },
+  statValue: {
+    color: Colors.purple,
+    fontWeight: 600,
+    fontSize: 20
+  },
+  statValuePositive: {
+    fontSize: 20,
+    color: Colors.green,
+  },
+  statValueCroissance: {
+    color: Colors.purple,
+    fontWeight: 600,
+  },
+  statWin: {
+    color: Colors.yellow,
+    fontWeight: 600,
+    fontSize: 20
+  },
+  statLabel: {
+    fontSize: 10,
+    color: Colors.text2,
+  },
+  filterRow: {
+    flexDirection: 'row-reverse',
+    gap: 8,
+    marginBottom: 8,
+    marginRight: 8,
+  },
+  filterChip: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+    backgroundColor: Colors.surface2,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  filterChipActive: {
+    backgroundColor: Colors.purple,
+    borderColor: Colors.purple,
+  },
+  filterText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: Colors.text3,
+  },
+  filterTextActive: {
+    color: '#fff',
+  },
+  chartContainer: {
+    marginTop: 8,
+    marginBottom: 16,
+    height: 205,
+    overflow: 'hidden'
+  },
+  cardGraphBankroll: {
+    backgroundColor: Colors.surface2,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: 18,
+    paddingVertical: 16,
+    margin: 16,
+  },
 
 });
