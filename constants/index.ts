@@ -1,7 +1,7 @@
 export const Colors = {
     bg: '#0a0a14',
     surface: '#12121f',
-    surface2: '#1a1a2e',
+    surface2: '#171723',
     surface3: '#22223a',
     border: '#2a2a45',
 
@@ -12,7 +12,8 @@ export const Colors = {
     cyan: '#00d4a8',
     yellow: '#f59e0b',
     red: '#ef4444',
-    green: '#04a485',
+    cashout: '#04a485',
+    green: '#a3e635',
 
     text: '#ffffff',
     text2: '#94a3b8',
