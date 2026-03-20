@@ -2,7 +2,7 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput } from 
 import { Colors } from '../../constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GlobalStyles } from '../../constants/styles';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import BetCard from '../../components/BetCard';
 

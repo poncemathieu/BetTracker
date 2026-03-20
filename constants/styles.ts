@@ -7,7 +7,7 @@ export const GlobalStyles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: Colors.bg,
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
   },
 
   // Typographie
