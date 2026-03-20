@@ -62,7 +62,7 @@ export default function HistoryScreen() {
     <SafeAreaView style={GlobalStyles.screen} edges={['top']}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/*Header */}
-        <View style={styles.header}>
+        <View style={GlobalStyles.header}>
           <Text style={styles.title}>Historique</Text>
           <View style={{ flexDirection: 'row', gap: 8 }}>
             <TouchableOpacity style={styles.btnIcon}>
@@ -176,12 +176,6 @@ export default function HistoryScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10,
-  },
   title: {
     fontSize: 24,
     color: Colors.text,

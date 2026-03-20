@@ -7,7 +7,13 @@ export const GlobalStyles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: Colors.bg,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
   },
 
   // Typographie
@@ -70,6 +76,16 @@ export const GlobalStyles = StyleSheet.create({
   btnSection: {
     gap: 16,
     alignItems: 'center',
+  },
+  btnOut: {
+    width: '100%',
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    borderRadius: 16,
+    borderColor: Colors.red,
+    borderWidth: 0.5,
+    paddingVertical: 16,
+    alignItems: 'center',
+    marginTop: 10,
   },
 
   // Tab switcher
