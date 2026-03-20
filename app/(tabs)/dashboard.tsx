@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { chartData7J, chartData1M, chartData3M, chartData1A } from '../../mock';
 import { LinearGradient } from 'expo-linear-gradient';
 import { GlobalStyles } from '../../constants/styles';
-import { Color, router } from 'expo-router';
+import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 
@@ -17,7 +17,7 @@ export default function DashboardScreen() {
   const [activeFilter, setActiveFilter] = useState('1A');
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={GlobalStyles.screen} edges={['top']}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
@@ -139,10 +139,6 @@ export default function DashboardScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.bg,
-  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -227,7 +223,7 @@ const styles = StyleSheet.create({
   },
   statValue: {
     color: Colors.purple,
-    fontWeight: 600,
+    fontWeight: '600',
     fontSize: 20
   },
   statValuePositive: {
@@ -236,11 +232,11 @@ const styles = StyleSheet.create({
   },
   statValueCroissance: {
     color: Colors.purple,
-    fontWeight: 600,
+    fontWeight: '600',
   },
   statWin: {
     color: Colors.yellow,
-    fontWeight: 600,
+    fontWeight: '600',
     fontSize: 20
   },
   statLabel: {

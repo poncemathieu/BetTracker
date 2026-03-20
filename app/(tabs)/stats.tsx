@@ -82,7 +82,7 @@ const [activeFilter, setActiveFilter] = useState('1A');
                 <Text style={{ fontSize: 18 }}>{sport.emoji}</Text>
                 <View>
                   <Text style={styles.sportName}>{sport.label}</Text>
-                  <Text style={styles.sportCount}>{sport.paris}</Text>
+                  <Text style={styles.sportCount}>{sport.paris} paris</Text>
                 </View>
               </View>
               <View style={styles.sportRight}>
@@ -200,33 +200,33 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   sportName: {
-  fontSize: 13,
-  fontWeight: '600',
-  color: Colors.text,
-},
-sportCount: {
-  fontSize: 10,
-  color: Colors.text3,
-  marginTop: 1,
-},
-sportRight: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: 10,
-  width: 220,
-  marginLeft: 16,
-},
-barBg: {
-  height: 4,
-  flex: 1,
-  backgroundColor: Colors.surface3,
-  borderRadius: 2,
-  overflow: 'hidden',
-},
-sportPct: {
-  fontSize: 12,
-  fontWeight: '700',
-  minWidth: 36,
-  color: Colors.purple2,
-},
+    fontSize: 13,
+    fontWeight: '600',
+    color: Colors.text,
+  },
+  sportCount: {
+    fontSize: 10,
+    color: Colors.text3,
+    marginTop: 1,
+  },
+  sportRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    width: 220,
+    marginLeft: 16,
+  },
+  barBg: {
+    height: 4,
+    flex: 1,
+    backgroundColor: Colors.surface3,
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  sportPct: {
+    fontSize: 12,
+    fontWeight: '700',
+    minWidth: 36,
+    color: Colors.purple2,
+  },
 });
