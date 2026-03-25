@@ -1,3 +1,31 @@
+Complète-le avec tout ce qu'il faut ignorer pour le monorepo :
+
+```gitignore
+# IDE
 .idea/
+.vscode/
+*.iws
+*.iml
+*.ipr
+
+# Backend
 bettracker-api/.idea/
 bettracker-api/api/target/
+bettracker-api/api/HELP.md
+
+# Frontend
+bettracker-mobileOld/node_modules/
+bettracker-mobileOld/.expo/
+bettracker-mobileOld/dist/
+bettracker-mobileOld/V2.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
+```
+
+👍
