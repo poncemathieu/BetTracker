@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BetTrack — Historique</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d14;
+    --surface: #13131f;
+    --surface2: #1a1a2e;
+    --surface3: #1f1f35;
+    --purple: #7c3aed;
+    --purple-light: #a855f7;
+    --purple-glow: rgba(124, 58, 237, 0.3);
+    --accent: #c084fc;
+    --text: #f0eeff;
+    --muted: #6b6b8a;
+    --border: rgba(124, 58, 237, 0.2);
+    --success: #22d3ee;
+    --success-bg: rgba(34, 211, 238, 0.1);
+    --error: #f87171;
+    --error-bg: rgba(248, 113, 113, 0.1);
+    --warning: #fbbf24;
+    --warning-bg: rgba(251, 191, 36, 0.1);
+    --cashout: #a3e635;
+    --cashout-bg: rgba(163, 230, 53, 0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.12;
+    pointer-events: none;
+  }
+  .bg-orb-1 { width: 500px; height: 500px; background: var(--purple); top: -150px; left: -100px; }
+  .bg-orb-2 { width: 400px; height: 400px; background: #1d4ed8; bottom: -100px; right: -100px; }
+
+  .grid-overlay {
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(124,58,237,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,58,237,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .phone {
+    width: 390px; height: 844px;
+    background: var(--surface);
+    border-radius: 48px;
+    border: 1px solid var(--border);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.05),
+      0 40px 80px rgba(0,0,0,0.6),
+      0 0 60px var(--purple-glow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  .notch {
+    width: 120px; height: 34px;
+    background: #000;
+    border-radius: 0 0 20px 20px;
+    margin: 0 auto;
+    flex-shrink: 0;
+  }
+
+  .screen {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+
+  /* Header */
+  .header {
+    padding: 16px 24px 12px;
+    animation: fadeIn 0.5s 0.2s ease forwards;
+    opacity: 0;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .header-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn-icon {
+    width: 40px; height: 40px;
+    background: var(--surface2);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  /* Search */
+  .search-wrap {
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--muted);
+  }
+
+  .search-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 16px 12px 42px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+  }
+
+  .search-input::placeholder { color: var(--muted); }
+
+  /* Status filters */
+  .status-filters {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .status-filters::-webkit-scrollbar { display: none; }
+
+  .status-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    flex-shrink: 0;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    color: var(--muted);
+    background: var(--surface2);
+    border-color: var(--border);
+  }
+
+  .status-chip.all.active { background: rgba(124,58,237,0.2); border-color: var(--purple); color: var(--accent); }
+  .status-chip.won.active { background: var(--success-bg); border-color: var(--success); color: var(--success); }
+  .status-chip.lost.active { background: var(--error-bg); border-color: var(--error); color: var(--error); }
+  .status-chip.pending.active { background: var(--warning-bg); border-color: var(--warning); color: var(--warning); }
+  .status-chip.cashout.active { background: var(--cashout-bg); border-color: var(--cashout); color: var(--cashout); }
+
+  /* Sport filters */
+  .sport-filters {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 24px 16px;
+  }
+  .sport-filters::-webkit-scrollbar { display: none; }
+
+  .sport-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--muted);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .sport-chip.active {
+    background: rgba(124,58,237,0.2);
+    border-color: var(--purple);
+    color: var(--accent);
+  }
+
+  /* Summary bar */
+  .summary-bar {
+    margin: 0 24px 16px;
+    background: var(--surface2);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    animation: fadeIn 0.5s 0.3s ease forwards;
+    opacity: 0;
+  }
+
+  .summary-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .summary-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .summary-val.positive { color: var(--success); }
+  .summary-val.negative { color: var(--error); }
+  .summary-val.accent { color: var(--accent); }
+
+  .summary-label {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* Bet list */
+  .bet-list {
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeIn 0.5s 0.4s ease forwards;
+    opacity: 0;
+  }
+
+  .date-separator {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 4px 0 2px;
+  }
+
+  .bet-card {
+    background: var(--surface2);
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bet-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .bet-card.won::before { background: var(--success); }
+  .bet-card.lost::before { background: var(--error); }
+  .bet-card.pending::before { background: var(--warning); }
+  .bet-card.cashout::before { background: var(--cashout); }
+
+  .bet-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .bet-sport-match {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .bet-sport-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .bet-match-info {
+    min-width: 0;
+  }
+
+  .bet-match {
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bet-bookmaker {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .bet-status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+
+  .badge-won { background: var(--success-bg); color: var(--success); }
+  .badge-lost { background: var(--error-bg); color: var(--error); }
+  .badge-pending { background: var(--warning-bg); color: var(--warning); }
+  .badge-cashout { background: var(--cashout-bg); color: var(--cashout); }
+
+  .bet-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .bet-details {
+    display: flex;
+    gap: 12px;
+  }
+
+  .bet-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .bet-detail-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .bet-detail-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .bet-selection {
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--surface3);
+    padding: 4px 10px;
+    border-radius: 8px;
+  }
+
+  .bet-result {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .bet-result.positive { color: var(--success); }
+  .bet-result.negative { color: var(--error); }
+  .bet-result.cashout { color: var(--cashout); }
+  .bet-result.pending { color: var(--warning); }
+
+  /* Bottom nav */
+  .bottom-nav {
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+
+  .nav-icon { font-size: 22px; filter: grayscale(1) opacity(0.4); }
+  .nav-item.active .nav-icon { filter: none; }
+  .nav-label { font-size: 10px; color: var(--muted); font-weight: 500; }
+  .nav-item.active .nav-label { color: var(--accent); }
+
+  .nav-add {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 4px 20px var(--purple-glow);
+    margin-top: -20px;
+  }
+
+  .bottom-bar {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .home-indicator {
+    width: 120px; height: 5px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="grid-overlay"></div>
+
+<div class="phone">
+  <div class="notch"></div>
+
+  <div class="screen">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-top">
+        <div class="header-title">Historique</div>
+        <div class="header-actions">
+          <div class="btn-icon">⬇️</div>
+          <div class="btn-icon">🔽</div>
+        </div>
+      </div>
+
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" type="text" placeholder="Rechercher un pari...">
+      </div>
+
+      <div class="status-filters">
+        <div class="status-chip all active">Tous (47)</div>
+        <div class="status-chip won">✅ Gagné (29)</div>
+        <div class="status-chip lost">❌ Perdu (12)</div>
+        <div class="status-chip pending">⏳ En cours (4)</div>
+        <div class="status-chip cashout">💰 Cash out (2)</div>
+      </div>
+    </div>
+
+    <!-- Sport filters -->
+    <div class="sport-filters">
+      <div class="sport-chip active">🌐 Tous</div>
+      <div class="sport-chip">⚽ Football</div>
+      <div class="sport-chip">🏒 NHL</div>
+      <div class="sport-chip">🏀 NBA</div>
+      <div class="sport-chip">🎾 Tennis</div>
+      <div class="sport-chip">🏈 NFL</div>
+    </div>
+
+    <!-- Summary bar -->
+    <div class="summary-bar">
+      <div class="summary-item">
+        <div class="summary-val accent">47</div>
+        <div class="summary-label">Total paris</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-val positive">+340,50 $</div>
+        <div class="summary-label">Profit net</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-val accent">61 %</div>
+        <div class="summary-label">Taux réussite</div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-val positive">+8,4 %</div>
+        <div class="summary-label">ROI</div>
+      </div>
+    </div>
+
+    <!-- Bet list -->
+    <div class="bet-list">
+
+      <div class="date-separator">Aujourd'hui</div>
+
+      <!-- Bet 1 - Won -->
+      <div class="bet-card won">
+        <div class="bet-top">
+          <div class="bet-sport-match">
+            <div class="bet-sport-icon">⚽</div>
+            <div class="bet-match-info">
+              <div class="bet-match">PSG vs Arsenal</div>
+              <div class="bet-bookmaker">Mise-o-jeu · 27 fév</div>
+            </div>
+          </div>
+          <div class="bet-status-badge badge-won">✅ Gagné</div>
+        </div>
+        <div class="bet-bottom">
+          <div class="bet-details">
+            <div class="bet-detail">
+              <div class="bet-detail-val">1.85</div>
+              <div class="bet-detail-label">Cote</div>
+            </div>
+            <div class="bet-detail">
+              <div class="bet-detail-val">50,00 $</div>
+              <div class="bet-detail-label">Mise</div>
+            </div>
+          </div>
+          <div class="bet-selection">PSG gagne</div>
+          <div class="bet-result positive">+42,50 $</div>
+        </div>
+      </div>
+
+      <!-- Bet 2 - Pending -->
+      <div class="bet-card pending">
+        <div class="bet-top">
+          <div class="bet-sport-match">
+            <div class="bet-sport-icon">🏒</div>
+            <div class="bet-match-info">
+              <div class="bet-match">Canadiens vs Maple Leafs</div>
+              <div class="bet-bookmaker">Sports Interaction · 27 fév</div>
+            </div>
+          </div>
+          <div class="bet-status-badge badge-pending">⏳ En cours</div>
+        </div>
+        <div class="bet-bottom">
+          <div class="bet-details">
+            <div class="bet-detail">
+              <div class="bet-detail-val">2.10</div>
+              <div class="bet-detail-label">Cote</div>
+            </div>
+            <div class="bet-detail">
+              <div class="bet-detail-val">30,00 $</div>
+              <div class="bet-detail-label">Mise</div>
+            </div>
+          </div>
+          <div class="bet-selection">Over 5.5</div>
+          <div class="bet-result pending">+33,00 $</div>
+        </div>
+      </div>
+
+      <div class="date-separator">Hier</div>
+
+      <!-- Bet 3 - Cash out -->
+      <div class="bet-card cashout">
+        <div class="bet-top">
+          <div class="bet-sport-match">
+            <div class="bet-sport-icon">🏀</div>
+            <div class="bet-match-info">
+              <div class="bet-match">Lakers vs Celtics</div>
+              <div class="bet-bookmaker">Bet99 · 26 fév</div>
+            </div>
+          </div>
+          <div class="bet-status-badge badge-cashout">💰 Cash out</div>
+        </div>
+        <div class="bet-bottom">
+          <div class="bet-details">
+            <div class="bet-detail">
+              <div class="bet-detail-val">1.65</div>
+              <div class="bet-detail-label">Cote</div>
+            </div>
+            <div class="bet-detail">
+              <div class="bet-detail-val">40,00 $</div>
+              <div class="bet-detail-label">Mise</div>
+            </div>
+          </div>
+          <div class="bet-selection">Lakers gagnent</div>
+          <div class="bet-result cashout">+18,00 $</div>
+        </div>
+      </div>
+
+      <!-- Bet 4 - Lost -->
+      <div class="bet-card lost">
+        <div class="bet-top">
+          <div class="bet-sport-match">
+            <div class="bet-sport-icon">🎾</div>
+            <div class="bet-match-info">
+              <div class="bet-match">Djokovic vs Alcaraz</div>
+              <div class="bet-bookmaker">Mise-o-jeu · 26 fév</div>
+            </div>
+          </div>
+          <div class="bet-status-badge badge-lost">❌ Perdu</div>
+        </div>
+        <div class="bet-bottom">
+          <div class="bet-details">
+            <div class="bet-detail">
+              <div class="bet-detail-val">2.40</div>
+              <div class="bet-detail-label">Cote</div>
+            </div>
+            <div class="bet-detail">
+              <div class="bet-detail-val">25,00 $</div>
+              <div class="bet-detail-label">Mise</div>
+            </div>
+          </div>
+          <div class="bet-selection">Djokovic gagne</div>
+          <div class="bet-result negative">-25,00 $</div>
+        </div>
+      </div>
+
+      <div style="height: 8px;"></div>
+
+    </div>
+
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-item">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">Accueil</div>
+    </div>
+    <div class="nav-item active">
+      <div class="nav-icon">📋</div>
+      <div class="nav-label">Historique</div>
+    </div>
+    <div class="nav-add">+</div>
+    <div class="nav-item">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">Stats</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">Profil</div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="home-indicator"></div>
+  </div>
+</div>
+
+</body>
+</html>

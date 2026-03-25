@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BetTrack — Connexion</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d14;
+    --surface: #13131f;
+    --surface2: #1a1a2e;
+    --purple: #7c3aed;
+    --purple-light: #a855f7;
+    --purple-glow: rgba(124, 58, 237, 0.3);
+    --accent: #c084fc;
+    --text: #f0eeff;
+    --muted: #6b6b8a;
+    --border: rgba(124, 58, 237, 0.2);
+    --success: #22d3ee;
+    --error: #f87171;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Background effects */
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    pointer-events: none;
+  }
+  .bg-orb-1 {
+    width: 500px; height: 500px;
+    background: var(--purple);
+    top: -150px; left: -100px;
+    animation: float1 8s ease-in-out infinite;
+  }
+  .bg-orb-2 {
+    width: 400px; height: 400px;
+    background: #1d4ed8;
+    bottom: -100px; right: -100px;
+    animation: float2 10s ease-in-out infinite;
+  }
+  .bg-orb-3 {
+    width: 300px; height: 300px;
+    background: var(--accent);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: float3 12s ease-in-out infinite;
+  }
+
+  @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,20px)} }
+  @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,30px)} }
+  @keyframes float3 { 0%,100%{transform:translate(-50%,-50%)} 50%{transform:translate(-45%,-55%)} }
+
+  /* Grid overlay */
+  .grid-overlay {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,58,237,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,58,237,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* Phone mockup */
+  .phone {
+    width: 390px;
+    height: 844px;
+    background: var(--surface);
+    border-radius: 48px;
+    border: 1px solid var(--border);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.05),
+      0 40px 80px rgba(0,0,0,0.6),
+      0 0 60px var(--purple-glow);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  @keyframes slideUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Notch */
+  .notch {
+    width: 120px; height: 34px;
+    background: #000;
+    border-radius: 0 0 20px 20px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+    flex-shrink: 0;
+  }
+
+  .screen {
+    flex: 1;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Logo */
+  .logo-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 32px;
+    animation: fadeIn 0.6s 0.3s ease forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  .logo-icon {
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, var(--purple), var(--accent));
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 32px var(--purple-glow);
+  }
+
+  .logo-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--text), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .logo-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    background: var(--surface2);
+    border-radius: 16px;
+    padding: 4px;
+    margin-bottom: 28px;
+    animation: fadeIn 0.6s 0.4s ease forwards;
+    opacity: 0;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .tab.active {
+    background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    color: white;
+    box-shadow: 0 4px 16px var(--purple-glow);
+  }
+
+  /* Form */
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    animation: fadeIn 0.6s 0.5s ease forwards;
+    opacity: 0;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .field-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+
+  .field-input:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px var(--purple-glow);
+  }
+
+  .field-input::placeholder { color: var(--muted); }
+
+  .field-input-row {
+    position: relative;
+  }
+
+  .field-input-row .field-input {
+    padding-right: 48px;
+  }
+
+  .field-input-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  /* Forgot */
+  .forgot {
+    text-align: right;
+    font-size: 12px;
+    color: var(--accent);
+    margin-top: -8px;
+    cursor: pointer;
+  }
+
+  /* Button */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    border: none;
+    border-radius: 16px;
+    padding: 16px;
+    color: white;
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 8px;
+    box-shadow: 0 8px 24px var(--purple-glow);
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  }
+
+  /* Divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 4px 0;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .divider-text {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* Social buttons */
+  .social-row {
+    display: flex;
+    gap: 12px;
+  }
+
+  .btn-social {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px;
+    color: var(--text);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+
+  .btn-social:hover {
+    border-color: var(--purple);
+    background: var(--purple-glow);
+  }
+
+  /* Bottom safe area */
+  .bottom-bar {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .home-indicator {
+    width: 120px;
+    height: 5px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+  }
+
+  /* Dark/Light toggle */
+  .theme-badge {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    z-index: 100;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-orb bg-orb-3"></div>
+<div class="grid-overlay"></div>
+
+<div class="phone">
+  <div class="notch"></div>
+
+  <div class="screen">
+
+    <div class="logo-area">
+      <div class="logo-icon">📈</div>
+      <div class="logo-name">BetTrack</div>
+      <div class="logo-sub">Analyse de paris sportifs</div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active">Connexion</div>
+      <div class="tab">Inscription</div>
+    </div>
+
+    <div class="form">
+      <div class="field">
+        <div class="field-label">Email</div>
+        <div class="field-input-row">
+          <input class="field-input" type="email" placeholder="mathieu@example.com" value="mathieu@example.com">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Mot de passe</div>
+        <div class="field-input-row">
+          <input class="field-input" type="password" placeholder="••••••••" value="••••••••">
+          <span class="field-input-icon">👁</span>
+        </div>
+      </div>
+
+      <div class="forgot">Mot de passe oublié ?</div>
+
+      <button class="btn-primary">Se connecter</button>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">ou continuer avec</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="social-row">
+        <button class="btn-social">🍎 Apple</button>
+        <button class="btn-social">🔵 Google</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-bar">
+    <div class="home-indicator"></div>
+  </div>
+</div>
+
+</body>
+</html>

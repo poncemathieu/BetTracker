@@ -1,0 +1,629 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
+.page { padding: 24px; background: #050510; }
+.page-title { color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-align: center; margin-bottom: 4px; opacity: 0.4; }
+.app-name { color: #fff; font-size: 18px; font-weight: 900; text-align: center; margin-bottom: 4px; }
+.app-sub { color: #64748b; font-size: 9px; letter-spacing: 2px; text-align: center; margin-bottom: 24px; }
+.section-header { color: #64748b; font-size: 9px; font-weight: 700; letter-spacing: 2px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid #1a1a2e; }
+.section { margin-bottom: 32px; }
+.phones-row { display: flex; gap: 16px; flex-wrap: wrap; }
+.phone { width: 220px; background: #0a0a14; border-radius: 28px; overflow: hidden; border: 1.5px solid #2a2a45; flex-shrink: 0; }
+.phone-bar { background: #0a0a14; padding: 10px 16px 4px; display: flex; justify-content: space-between; }
+.phone-bar span { color: #fff; font-size: 9px; font-weight: 600; }
+.screen { padding: 10px 12px 0; background: #0a0a14; }
+.lbl { color: #64748b; font-size: 7px; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 3px; margin-top: 8px; }
+.title { color: #fff; font-size: 16px; font-weight: 900; margin-bottom: 8px; }
+.subtitle { color: #94a3b8; font-size: 8px; font-weight: 400; margin-bottom: 10px; line-height: 1.4; }
+.btn-primary { background: #7c3aed; border-radius: 12px; padding: 10px; text-align: center; color: #fff; font-size: 10px; font-weight: 700; margin-bottom: 6px; }
+.btn-secondary { background: #12121f; border: 1px solid #2a2a45; border-radius: 12px; padding: 8px; text-align: center; color: #94a3b8; font-size: 9px; margin-bottom: 6px; }
+.link-text { color: #94a3b8; font-size: 8px; text-align: center; margin-top: 4px; }
+.link-text span { color: #a78bfa; }
+.tabs-sw { display: flex; background: #12121f; border: 1px solid #2a2a45; border-radius: 10px; padding: 3px; margin-bottom: 10px; }
+.tab-sw { flex: 1; padding: 6px; border-radius: 8px; text-align: center; color: #64748b; font-size: 8px; font-weight: 600; }
+.tab-sw.active { background: #7c3aed; color: #fff; }
+.input { background: #1a1a2e; border: 1px solid #2a2a45; border-radius: 10px; padding: 8px 10px; color: #94a3b8; font-size: 8px; margin-bottom: 6px; }
+.feature-card { background: #1a1a2e; border: 1px solid #2a2a45; border-radius: 12px; padding: 8px 10px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.feature-icon { font-size: 14px; }
+.feature-title { color: #fff; font-size: 9px; font-weight: 700; }
+.feature-desc { color: #64748b; font-size: 7px; margin-top: 1px; line-height: 1.3; }
+.logo-box { width: 60px; height: 60px; background: #7c3aed; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 8px; }
+.welcome-features { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.welcome-feat { background: #1a1a2e; border: 1px solid #2a2a45; border-radius: 10px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; }
+.wf-left { display: flex; align-items: center; gap: 6px; }
+.wf-title { color: #fff; font-size: 8px; font-weight: 700; }
+.wf-desc { color: #64748b; font-size: 6px; }
+.wf-val { font-size: 9px; font-weight: 800; }
+.pagination { display: flex; justify-content: center; gap: 4px; margin: 8px 0; }
+.dot { width: 4px; height: 4px; border-radius: 2px; background: #2a2a45; }
+.dot.active { width: 14px; background: #7c3aed; }
+.devise-row { display: flex; gap: 4px; margin-bottom: 8px; }
+.devise-card { flex: 1; background: #1a1a2e; border: 1px solid #2a2a45; border-radius: 8px; padding: 6px 4px; text-align: center; }
+.devise-card.active { background: #7c3aed; border-color: #7c3aed; }
+.devise-sym { color: #fff; font-size: 10px; font-weight: 700; }
+.devise-lbl { color: rgba(255,255,255,0.6); font-size: 6px; }
+.montant-input { background: #1a1a2e; border: 1px solid #2a2a45; border-radius: 10px; padding: 10px; display: flex; align-items: center; gap: 4px; margin-bottom: 8px; }
+.montant-sym { color: #fff; font-size: 12px; font-weight: 700; }
+.montant-val { color: #fff; font-size: 14px; font-weight: 900; }
+.rapides-row { display: flex; gap: 4px; margin-bottom: 8px; }
+.rapide-chip { flex: 1; background: #1a1a2e; border: 1px solid #2a2a45; border-radius: 8px; padding: 5px 2px; text-align: center; color: #94a3b8; font-size: 7px; font-weight: 600; }
+.rapide-chip.active { border-color: #7c3aed; color: #7c3aed; }
+.conseil { background: rgba(0,212,168,0.08); border: 1px solid rgba(0,212,168,0.3); border-radius: 10px; padding: 8px; display: flex; gap: 6px; align-items: flex-start; margin-bottom: 8px; }
+.conseil-text { color: #00d4a8; font-size: 7px; line-height: 1.4; }
+.bankroll-card { background: linear-gradient(135deg, #1a0a4a, #3b1fa3); border-radius: 14px; padding: 12px; margin-bottom: 10px; }
+.bk-lbl { color: rgba(255,255,255,0.6); font-size: 7px; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 4px; }
+.bk-amount { color: #fff; font-size: 22px; font-weight: 900; line-height: 1; }
+.bk-currency { color: rgba(255,255,255,0.7); font-size: 11px; }
+.bk-depart { color: rgba(255,255,255,0.4); font-size: 7px; margin: 3px 0 8px; }
+.bk-stats-row { display: flex; gap: 10px; }
+.bk-stat { display: flex; flex-direction: column; gap: 1px; }
+.bk-stat-val { font-size: 9px; font-weight: 700; }
+.bk-stat-lbl { color: rgba(255,255,255,0.4); font-size: 6px; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+.stat-card { background: #1a1a2e; border: 1px solid #2a2a45; border-radius: 12px; padding: 10px; }
+.stat-emoji { font-size: 14px; margin-bottom: 3px; }
+.stat-val { font-size: 14px; font-weight: 800; margin-bottom: 1px; }
+.stat-lbl { color: #64748b; font-size: 7px; }
+.chart-area { background: #12121f; border: 1px solid #2a2a45; border-radius: 12px; padding: 10px; margin-bottom: 10px; }
+.chart-title { color: #fff; font-size: 9px; font-weight: 700; margin-bottom: 6px; }
+.chart-filters { display: flex; gap: 4px; justify-content: flex-end; margin-bottom: 8px; }
+.cf { padding: 3px 7px; border-radius: 6px; background: #1a1a2e; border: 1px solid #2a2a45; color: #64748b; font-size: 7px; }
+.cf.active { background: #7c3aed; border-color: #7c3aed; color: #fff; }
+.chart-svg { width: 100%; }
+.tabbar { display: flex; background: #12121f; border-top: 1px solid #2a2a45; padding: 6px 0 10px; }
+.tb { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.tb-icon { font-size: 14px; opacity: 0.4; }
+.tb-icon.active { opacity: 1; }
+.tb-lbl { font-size: 6px; color: #64748b; font-weight: 600; }
+.tb-lbl.active { color: #a78bfa; }
+.tb-add { width: 32px; height: 32px; background: #7c3aed; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.section-title { color: #fff; font-size: 10px; font-weight: 700; margin-bottom: 6px; }
+.section-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.section-link { color: #a78bfa; font-size: 8px; }
+.history-filters { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+.hf-chip { padding: 4px 8px; border-radius: 8px; font-size: 7px; font-weight: 700; }
+.hf-active { background: #7c3aed; color: #fff; }
+.hf-won { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+.hf-lost { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+.history-summary { display: flex; gap: 8px; background: #1a1a2e; border: 1px solid #2a2a45; border-radius: 10px; padding: 8px; margin-bottom: 8px; }
+.hs-item { flex: 1; text-align: center; }
+.hs-val { font-size: 9px; font-weight: 800; }
+.hs-lbl { color: #64748b; font-size: 6px; margin-top: 1px; }
+.bet-card { background: #1a1a2e; border: 1px solid #2a2a45; border-radius: 12px; padding: 8px 10px; margin-bottom: 6px; }
+.bet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.bet-match { color: #fff; font-size: 9px; font-weight: 700; }
+.bet-badge { padding: 2px 7px; border-radius: 6px; font-size: 7px; font-weight: 700; }
+.badge-won { background: rgba(34,197,94,0.15); color: #22c55e; }
+.badge-lost { background: rgba(239,68,68,0.15); color: #ef4444; }
+.badge-pending { background: rgba(245,158,11,0.15); color: #f59e0b; }
+.badge-cashout { background: rgba(34,197,94,0.1); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+.bet-meta { color: #64748b; font-size: 7px; margin-bottom: 4px; }
+.bet-details { display: flex; align-items: center; gap: 6px; }
+.bet-cote { color: #94a3b8; font-size: 8px; font-weight: 700; }
+.bet-mise { color: #94a3b8; font-size: 7px; }
+.bet-selection { color: #64748b; font-size: 7px; flex: 1; text-align: center; }
+.bet-result { font-size: 10px; font-weight: 900; }
+.res-pos { color: #22c55e; }
+.res-neg { color: #ef4444; }
+.res-pend { color: #f59e0b; }
+.sport-icon { font-size: 10px; }
+.add-screen { padding: 10px 12px; }
+.sports-scroll { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px; }
+.sport-card { background: #1a1a2e; border: 1px solid #2a2a45; border-radius: 10px; padding: 8px 10px; text-align: center; min-width: 52px; }
+.sport-card.active { border-color: #7c3aed; }
+.sport-emoji { font-size: 18px; margin-bottom: 2px; }
+.sport-lbl { font-size: 6px; color: #64748b; font-weight: 600; }
+.sport-lbl.active { color: #a78bfa; }
+.date-book-row { display: flex; gap: 6px; margin-bottom: 6px; }
+.dbi { flex: 1; }
+.type-row { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+.type-chip { padding: 5px 8px; border-radius: 8px; background: #1a1a2e; border: 1px solid #2a2a45; color: #64748b; font-size: 7px; font-weight: 600; width: 30%; text-align: center; }
+.type-chip.active { border-color: #7c3aed; color: #a78bfa; }
+.mise-card { background: #1a1a2e; border: 1px solid #2a2a45; border-radius: 12px; padding: 10px; margin-bottom: 8px; }
+.mise-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.mise-title { color: #fff; font-size: 9px; font-weight: 700; }
+.mise-bankroll { color: #64748b; font-size: 7px; }
+.mise-bk-val { color: #a78bfa; font-weight: 700; }
+.mise-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.mise-input { background: #0a0a14; border: 1px solid #7c3aed; border-radius: 8px; padding: 6px 8px; display: flex; align-items: center; gap: 3px; min-width: 56px; }
+.mise-sym { color: #fff; font-size: 10px; font-weight: 700; }
+.mise-val { color: #fff; font-size: 12px; font-weight: 900; }
+.pct-row { display: flex; gap: 3px; }
+.pct-chip { padding: 4px 6px; border-radius: 6px; background: #0a0a14; border: 1px solid #2a2a45; color: #64748b; font-size: 7px; }
+.pct-chip.active { background: #7c3aed; border-color: #7c3aed; color: #fff; }
+.mise-resume { display: flex; justify-content: space-between; border-top: 1px solid #2a2a45; padding-top: 8px; }
+.mr-item { text-align: center; }
+.mr-val { font-size: 9px; font-weight: 700; color: #fff; }
+.mr-lbl { color: #64748b; font-size: 6px; margin-top: 1px; }
+.stats-sport-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px; }
+.sport-stat-item { background: #1a1a2e; border: 1px solid #2a2a45; border-radius: 10px; padding: 7px 9px; display: flex; align-items: center; justify-content: space-between; }
+.ss-left { display: flex; align-items: center; gap: 6px; }
+.ss-name { color: #fff; font-size: 8px; font-weight: 600; }
+.ss-count { color: #64748b; font-size: 6px; }
+.ss-bar-wrap { width: 60px; height: 3px; background: #2a2a45; border-radius: 2px; }
+.ss-bar { height: 3px; border-radius: 2px; background: #7c3aed; }
+.ss-pct { color: #a78bfa; font-size: 8px; font-weight: 700; min-width: 24px; text-align: right; }
+.profile-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.avatar { width: 42px; height: 42px; border-radius: 21px; background: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.profile-name { color: #fff; font-size: 13px; font-weight: 800; }
+.profile-email { color: #64748b; font-size: 8px; margin-top: 1px; }
+.settings-section { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+.setting-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: #1a1a2e; border: 1px solid #2a2a45; border-radius: 10px; }
+.si-left { display: flex; align-items: center; gap: 6px; }
+.si-icon { font-size: 11px; }
+.si-name { color: #fff; font-size: 8px; font-weight: 600; }
+.si-val { color: #64748b; font-size: 7px; }
+.si-arrow { color: #64748b; font-size: 10px; }
+.logout-btn { padding: 10px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 12px; color: #ef4444; font-size: 9px; font-weight: 700; text-align: center; margin-bottom: 12px; }
+</style>
+
+<div class="page">
+  <div class="page-title">MAQUETTE MOBILE</div>
+  <div class="app-name">BetTrack</div>
+  <div class="app-sub">TRACK · ANALYSE · STRATEGIZE</div>
+
+  <!-- ONBOARDING -->
+  <div class="section">
+    <div class="section-header">01 — ONBOARDING</div>
+    <div class="phones-row">
+
+      <!-- Welcome -->
+      <div>
+        <div style="color:#64748b;font-size:8px;text-align:center;margin-bottom:6px;font-weight:600">SPLASH</div>
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>▲▲▲</span></div>
+          <div class="screen" style="display:flex;flex-direction:column;align-items:center;padding-top:20px">
+            <div class="logo-box">📊</div>
+            <div style="color:#fff;font-size:18px;font-weight:900;margin-bottom:2px">BetTracker</div>
+            <div style="color:#64748b;font-size:7px;letter-spacing:2px;margin-bottom:16px">ANALYSE DE PARIS SPORTIFS</div>
+            <div class="welcome-features" style="width:100%">
+              <div class="welcome-feat">
+                <div class="wf-left"><span style="font-size:14px">📈</span><div><div class="wf-title">Suivi de bankroll</div><div class="wf-desc">Visualisez votre évolution</div></div></div>
+                <div class="wf-val" style="color:#22c55e">+17%</div>
+              </div>
+              <div class="welcome-feat">
+                <div class="wf-left"><span style="font-size:14px">🎯</span><div><div class="wf-title">ROI en temps réel</div><div class="wf-desc">Mesurez votre rentabilité</div></div></div>
+                <div class="wf-val" style="color:#22c55e">+8,4%</div>
+              </div>
+              <div class="welcome-feat">
+                <div class="wf-left"><span style="font-size:14px">🏆</span><div><div class="wf-title">Taux de réussite</div><div class="wf-desc">Analysez vos performances</div></div></div>
+                <div class="wf-val" style="color:#f59e0b">61%</div>
+              </div>
+            </div>
+            <div class="pagination"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
+            <div style="width:100%;margin-top:8px">
+              <div class="btn-primary">Commencer →</div>
+              <div class="link-text">Déjà un compte ? <span>Se connecter</span></div>
+            </div>
+          </div>
+          <div style="height:12px;background:#0a0a14"></div>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div>
+        <div style="color:#64748b;font-size:8px;text-align:center;margin-bottom:6px;font-weight:600">FONCTIONNALITÉS</div>
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>▲▲▲</span></div>
+          <div class="screen">
+            <div style="color:#a78bfa;font-size:7px;margin-bottom:4px">Étape 1 sur 3</div>
+            <div class="title">Gérez vos paris <span style="color:#a78bfa">intelligemment</span></div>
+            <div class="subtitle">BetTracker vous aide à analyser vos performances et optimiser votre stratégie.</div>
+            <div class="feature-card"><span class="feature-icon">📊</span><div><div class="feature-title">Dashboard complet</div><div class="feature-desc">Bankroll, ROI, taux de réussite et évolution en un coup d'œil.</div></div></div>
+            <div class="feature-card"><span class="feature-icon">⚡</span><div><div class="feature-title">Enregistrement rapide</div><div class="feature-desc">Ajoutez un pari en quelques secondes avec calcul automatique.</div></div></div>
+            <div class="feature-card"><span class="feature-icon">🏅</span><div><div class="feature-title">Statistiques avancées</div><div class="feature-desc">Analysez vos résultats par sport, bookmaker et période.</div></div></div>
+            <div class="pagination" style="margin-top:10px"><div class="dot"></div><div class="dot active"></div><div class="dot"></div></div>
+            <div style="margin-top:8px"><div class="btn-primary">Suivant →</div><div class="link-text">Passer</div></div>
+          </div>
+          <div style="height:12px;background:#0a0a14"></div>
+        </div>
+      </div>
+
+      <!-- Config -->
+      <div>
+        <div style="color:#64748b;font-size:8px;text-align:center;margin-bottom:6px;font-weight:600">CONFIGURATION</div>
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>▲▲▲</span></div>
+          <div class="screen">
+            <div style="color:#a78bfa;font-size:7px;margin-bottom:4px">Étape 3 sur 3</div>
+            <div class="title">Configurez votre <span style="color:#a78bfa">bankroll 💰</span></div>
+            <div class="subtitle">Entrez votre mise de départ. Vous pourrez modifier cela plus tard dans les paramètres.</div>
+            <div class="lbl">DEVISE</div>
+            <div class="devise-row">
+              <div class="devise-card"><div class="devise-sym">€</div><div class="devise-lbl">EUR</div></div>
+              <div class="devise-card active"><div class="devise-sym">$</div><div class="devise-lbl">CAD</div></div>
+              <div class="devise-card"><div class="devise-sym">$</div><div class="devise-lbl">USD</div></div>
+              <div class="devise-card"><div class="devise-sym">£</div><div class="devise-lbl">GBP</div></div>
+            </div>
+            <div class="lbl">MONTANT INITIAL</div>
+            <div class="montant-input"><span class="montant-sym">$</span><span class="montant-val">2 000</span></div>
+            <div class="lbl">MONTANTS RAPIDES</div>
+            <div class="rapides-row">
+              <div class="rapide-chip">500 $</div>
+              <div class="rapide-chip">1 000 $</div>
+              <div class="rapide-chip active">2 000 $</div>
+              <div class="rapide-chip">5 000 $</div>
+            </div>
+            <div class="conseil"><span style="font-size:12px">💡</span><div class="conseil-text">Conseil : Ne misez jamais plus de 5% de votre bankroll sur un seul pari. BetTracker vous y aidera.</div></div>
+            <div class="btn-primary">✓ Commencer à tracker</div>
+            <div class="link-text" style="margin-top:4px">Vous pouvez modifier cela à tout moment</div>
+          </div>
+          <div style="height:12px;background:#0a0a14"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- AUTH -->
+  <div class="section">
+    <div class="section-header">02 — AUTHENTIFICATION</div>
+    <div class="phones-row">
+
+      <!-- Login -->
+      <div>
+        <div style="color:#64748b;font-size:8px;text-align:center;margin-bottom:6px;font-weight:600">CONNEXION</div>
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>▲▲▲</span></div>
+          <div class="screen" style="display:flex;flex-direction:column;align-items:center;padding-top:16px">
+            <div class="logo-box" style="width:48px;height:48px;border-radius:14px;font-size:20px">📊</div>
+            <div style="color:#fff;font-size:16px;font-weight:900;margin:6px 0 2px">BetTracker</div>
+            <div style="color:#64748b;font-size:7px;letter-spacing:2px;margin-bottom:12px">ANALYSE DE PARIS SPORTIFS</div>
+            <div style="width:100%">
+              <div class="tabs-sw"><div class="tab-sw active">Connexion</div><div class="tab-sw">Inscription</div></div>
+              <div class="lbl">EMAIL</div>
+              <div class="input">mathieu@example.com</div>
+              <div class="lbl">MOT DE PASSE</div>
+              <div class="input">••••••••</div>
+              <div style="text-align:right;margin-bottom:8px"><span style="color:#a78bfa;font-size:7px">Mot de passe oublié ?</span></div>
+              <div class="btn-primary">Se connecter</div>
+              <div style="display:flex;align-items:center;gap:6px;margin:6px 0"><div style="flex:1;height:1px;background:#2a2a45"></div><span style="color:#64748b;font-size:7px">ou continuer avec</span><div style="flex:1;height:1px;background:#2a2a45"></div></div>
+              <div style="display:flex;gap:6px">
+                <div class="btn-secondary" style="flex:1">🍎 Apple</div>
+                <div class="btn-secondary" style="flex:1">🌐 Google</div>
+              </div>
+            </div>
+          </div>
+          <div style="height:12px;background:#0a0a14"></div>
+        </div>
+      </div>
+
+      <!-- Register -->
+      <div>
+        <div style="color:#64748b;font-size:8px;text-align:center;margin-bottom:6px;font-weight:600">INSCRIPTION</div>
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>▲▲▲</span></div>
+          <div class="screen">
+            <div style="color:#fff;font-size:14px;font-weight:900;margin-bottom:6px">Créer un compte</div>
+            <div class="tabs-sw"><div class="tab-sw">Connexion</div><div class="tab-sw active">Inscription</div></div>
+            <div style="display:flex;gap:6px">
+              <div style="flex:1"><div class="lbl">PRÉNOM</div><div class="input">Mathieu</div></div>
+              <div style="flex:1"><div class="lbl">NOM</div><div class="input">Temblay</div></div>
+            </div>
+            <div class="lbl">EMAIL</div>
+            <div class="input">mathieu@example.com</div>
+            <div class="lbl">MOT DE PASSE</div>
+            <div class="input">••••••••</div>
+            <div class="lbl">CONFIRMER</div>
+            <div class="input">••••••••</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+              <div style="width:12px;height:12px;border-radius:4px;background:#7c3aed;display:flex;align-items:center;justify-content:center"><span style="color:#fff;font-size:8px">✓</span></div>
+              <span style="color:#64748b;font-size:7px">J'accepte les <span style="color:#a78bfa">Conditions d'utilisation</span></span>
+            </div>
+            <div class="btn-primary">Créer mon compte</div>
+            <div style="display:flex;align-items:center;gap:6px;margin:6px 0"><div style="flex:1;height:1px;background:#2a2a45"></div><span style="color:#64748b;font-size:7px">ou continuer avec</span><div style="flex:1;height:1px;background:#2a2a45"></div></div>
+            <div style="display:flex;gap:6px">
+              <div class="btn-secondary" style="flex:1">🍎 Apple</div>
+              <div class="btn-secondary" style="flex:1">🌐 Google</div>
+            </div>
+            <div class="link-text" style="margin-top:6px">Déjà un compte ? <span>Se connecter</span></div>
+          </div>
+          <div style="height:8px;background:#0a0a14"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="section">
+    <div class="section-header">03 — DASHBOARD & STATISTIQUES</div>
+    <div class="phones-row">
+      <div>
+        <div style="color:#64748b;font-size:8px;text-align:center;margin-bottom:6px;font-weight:600">DASHBOARD</div>
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>▲▲▲</span></div>
+          <div class="screen">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+              <div><div style="color:#94a3b8;font-size:8px">Bonjour 👋</div><div style="color:#fff;font-size:16px;font-weight:900">Mathieu</div></div>
+              <div style="width:32px;height:32px;border-radius:16px;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:14px">🧑</div>
+            </div>
+            <div class="bankroll-card">
+              <div class="bk-lbl">BANKROLL ACTUELLE</div>
+              <div><span class="bk-amount">2 340,50</span><br><span class="bk-currency">$</span></div>
+              <div class="bk-depart">Départ : 2 000,00 $</div>
+              <div class="bk-stats-row">
+                <div class="bk-stat"><div class="bk-stat-val" style="color:#22c55e">+340,50 $</div><div class="bk-stat-lbl">PROFIT TOTAL</div></div>
+                <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
+                <div class="bk-stat"><div class="bk-stat-val" style="color:#a78bfa">+17,0 %</div><div class="bk-stat-lbl">CROISSANCE</div></div>
+                <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
+                <div class="bk-stat"><div class="bk-stat-val" style="color:#fff">47</div><div class="bk-stat-lbl">PARIS</div></div>
+              </div>
+            </div>
+            <div class="section-row"><div class="section-title">Statistiques</div><div class="section-link">Ce mois</div></div>
+            <div class="stats-grid">
+              <div class="stat-card"><div class="stat-emoji">📈</div><div class="stat-val" style="color:#22c55e">+8,4 %</div><div class="stat-lbl">ROI</div></div>
+              <div class="stat-card"><div class="stat-emoji">🎯</div><div class="stat-val" style="color:#a78bfa">61 %</div><div class="stat-lbl">Taux de réussite</div></div>
+              <div class="stat-card"><div class="stat-emoji">💰</div><div class="stat-val" style="color:#22c55e">+128 $</div><div class="stat-lbl">Profit ce mois</div></div>
+              <div class="stat-card"><div class="stat-emoji">🏆</div><div class="stat-val" style="color:#f59e0b">18</div><div class="stat-lbl">Paris ce mois</div></div>
+            </div>
+            <div class="section-title">Évolution bankroll</div>
+            <div class="chart-area">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                <div style="color:#fff;font-size:8px;font-weight:700">Historique</div>
+                <div class="chart-filters">
+                  <div class="cf">7J</div><div class="cf active">1M</div><div class="cf">3M</div><div class="cf">1A</div>
+                </div>
+              </div>
+              <svg class="chart-svg" viewBox="0 0 180 60">
+                <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7c3aed" stop-opacity="0.4"/><stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/></linearGradient></defs>
+                <path d="M0,50 C20,48 40,44 60,38 C80,32 100,28 120,22 C140,16 160,10 180,6" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+                <path d="M0,50 C20,48 40,44 60,38 C80,32 100,28 120,22 C140,16 160,10 180,6 L180,60 L0,60Z" fill="url(#g)"/>
+                <text x="0" y="59" font-size="5" fill="#64748b">1 fév</text>
+                <text x="40" y="59" font-size="5" fill="#64748b">8 fév</text>
+                <text x="85" y="59" font-size="5" fill="#64748b">15 fév</text>
+                <text x="128" y="59" font-size="5" fill="#64748b">22 fév</text>
+                <text x="160" y="59" font-size="5" fill="#64748b">Auj.</text>
+                <circle cx="180" cy="6" r="2.5" fill="#a78bfa"/>
+              </svg>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tb"><div class="tb-icon active">🏠</div><div class="tb-lbl active">Accueil</div></div>
+            <div class="tb"><div class="tb-icon">📋</div><div class="tb-lbl">Historique</div></div>
+            <div class="tb"><div class="tb-add"><span style="color:#fff;font-size:14px">+</span></div><div class="tb-lbl"> </div></div>
+            <div class="tb"><div class="tb-icon">📊</div><div class="tb-lbl">Stats</div></div>
+            <div class="tb"><div class="tb-icon">👤</div><div class="tb-lbl">Profil</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD BET -->
+  <div class="section">
+    <div class="section-header">04 — AJOUTER PARI</div>
+    <div class="phones-row">
+      <div>
+        <div style="color:#64748b;font-size:8px;text-align:center;margin-bottom:6px;font-weight:600">FORMULAIRE PARI</div>
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>▲▲▲</span></div>
+          <div class="screen">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;margin-top:6px">
+              <div style="width:28px;height:28px;background:#1a1a2e;border:1px solid #2a2a45;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px">←</div>
+              <div style="color:#fff;font-size:14px;font-weight:900">Nouveau pari</div>
+            </div>
+            <div class="lbl">SPORT</div>
+            <div class="sports-scroll">
+              <div class="sport-card active"><div class="sport-emoji">⚽</div><div class="sport-lbl active">Football</div></div>
+              <div class="sport-card"><div class="sport-emoji">🏒</div><div class="sport-lbl">NHL</div></div>
+              <div class="sport-card"><div class="sport-emoji">🏀</div><div class="sport-lbl">NBA</div></div>
+              <div class="sport-card"><div class="sport-emoji">🎾</div><div class="sport-lbl">Tennis</div></div>
+            </div>
+            <div class="lbl">ÉVÉNEMENT</div>
+            <div class="lbl">MATCH</div>
+            <div class="input">PSG vs Arsenal</div>
+            <div class="date-book-row">
+              <div class="dbi"><div class="lbl">DATE</div><div class="input">27 fév 2026</div></div>
+              <div class="dbi"><div class="lbl">BOOKMAKER</div><div class="input">Mise-o-jeu</div></div>
+            </div>
+            <div class="lbl">TYPE DE PARI</div>
+            <div class="type-row">
+              <div class="type-chip active">1X2</div>
+              <div class="type-chip">Over/Under</div>
+              <div class="type-chip">Handicap</div>
+              <div class="type-chip">Les deux marquent</div>
+              <div class="type-chip">Double chance</div>
+              <div class="type-chip">Autre</div>
+            </div>
+            <div class="date-book-row">
+              <div class="dbi"><div class="lbl">SÉLECTION</div><div class="input">PSG gagne</div></div>
+              <div class="dbi"><div class="lbl">COTE</div><div class="input">1.85</div></div>
+            </div>
+            <div class="mise-card">
+              <div class="mise-header"><div class="mise-title">Mise</div><div class="mise-bankroll">Bankroll : <span class="mise-bk-val">2 340,50 $</span></div></div>
+              <div class="mise-row">
+                <div class="mise-input"><span class="mise-sym">$</span><span class="mise-val">50</span></div>
+                <div class="pct-row">
+                  <div class="pct-chip">1%</div><div class="pct-chip">2%</div><div class="pct-chip active">5%</div><div class="pct-chip">10%</div>
+                </div>
+              </div>
+              <div class="mise-resume">
+                <div class="mr-item"><div class="mr-val">50,00 $</div><div class="mr-lbl">Mise</div></div>
+                <div class="mr-item"><div class="mr-val" style="color:#22c55e">+42,50 $</div><div class="mr-lbl">Gain net</div></div>
+                <div class="mr-item"><div class="mr-val" style="color:#a78bfa">92,50 $</div><div class="mr-lbl">Retour total</div></div>
+              </div>
+            </div>
+            <div class="btn-primary" style="margin-bottom:12px">✓ Enregistrer le pari</div>
+          </div>
+          <div class="tabbar">
+            <div class="tb"><div class="tb-icon">🏠</div><div class="tb-lbl">Accueil</div></div>
+            <div class="tb"><div class="tb-icon">📋</div><div class="tb-lbl">Historique</div></div>
+            <div class="tb"><div class="tb-add"><span style="color:#fff;font-size:14px">+</span></div><div class="tb-lbl"> </div></div>
+            <div class="tb"><div class="tb-icon">📊</div><div class="tb-lbl">Stats</div></div>
+            <div class="tb"><div class="tb-icon">👤</div><div class="tb-lbl">Profil</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="section">
+    <div class="section-header">05 — HISTORIQUE DES PARIS</div>
+    <div class="phones-row">
+      <div>
+        <div style="color:#64748b;font-size:8px;text-align:center;margin-bottom:6px;font-weight:600">HISTORIQUE</div>
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>▲▲▲</span></div>
+          <div class="screen">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;margin-top:4px">
+              <div style="color:#fff;font-size:16px;font-weight:900">Historique</div>
+              <div style="display:flex;gap:6px">
+                <div style="width:24px;height:24px;background:#1a1a2e;border:1px solid #2a2a45;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px">⬇</div>
+                <div style="width:24px;height:24px;background:#1a1a2e;border:1px solid #2a2a45;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px">▼</div>
+              </div>
+            </div>
+            <div class="history-filters">
+              <div class="hf-chip hf-active">Tous (47)</div>
+              <div class="hf-chip hf-won">✓ Gagné (29)</div>
+              <div class="hf-chip hf-lost">✗ Perdu (12)</div>
+            </div>
+            <div style="display:flex;gap:4px;margin-bottom:8px">
+              <div class="hf-chip hf-active" style="font-size:7px">🌐 Tous</div>
+              <div class="hf-chip" style="background:#1a1a2e;border:1px solid #2a2a45;color:#94a3b8;font-size:7px">⚽ Football</div>
+              <div class="hf-chip" style="background:#1a1a2e;border:1px solid #2a2a45;color:#94a3b8;font-size:7px">🏒 NHL</div>
+              <div class="hf-chip" style="background:#1a1a2e;border:1px solid #2a2a45;color:#94a3b8;font-size:7px">🏀 NBA</div>
+            </div>
+            <div class="history-summary">
+              <div class="hs-item"><div class="hs-val" style="color:#a78bfa">47</div><div class="hs-lbl">Total paris</div></div>
+              <div class="hs-item"><div class="hs-val" style="color:#22c55e">+340,50 $</div><div class="hs-lbl">Profit net</div></div>
+              <div class="hs-item"><div class="hs-val" style="color:#a78bfa">61 %</div><div class="hs-lbl">Taux réussite</div></div>
+              <div class="hs-item"><div class="hs-val" style="color:#22c55e">+8,4 %</div><div class="hs-lbl">ROI</div></div>
+            </div>
+            <div style="color:#64748b;font-size:7px;font-weight:700;letter-spacing:1px;margin-bottom:6px">AUJOURD'HUI</div>
+            <div class="bet-card">
+              <div class="bet-header"><div style="display:flex;align-items:center;gap:4px"><span class="sport-icon">⚽</span><div class="bet-match">PSG vs Arsenal</div></div><div class="bet-badge badge-won">✓ Gagné</div></div>
+              <div class="bet-meta">Mise-o-jeu · 27 fév</div>
+              <div class="bet-details"><div class="bet-cote">1.85</div><div class="bet-mise">50,00 $</div><div class="bet-selection">PSG gagne</div><div class="bet-result res-pos">+42,50 $</div></div>
+            </div>
+            <div class="bet-card">
+              <div class="bet-header"><div style="display:flex;align-items:center;gap:4px"><span class="sport-icon">🏒</span><div class="bet-match">Canadiens vs Maple Leafs</div></div><div class="bet-badge badge-pending">⏳ En cours</div></div>
+              <div class="bet-meta">Sports Interaction · 27 fév</div>
+              <div class="bet-details"><div class="bet-cote">2.10</div><div class="bet-mise">30,00 $</div><div class="bet-selection">Over 5.5</div><div class="bet-result res-pend">+33,00 $</div></div>
+            </div>
+            <div style="color:#64748b;font-size:7px;font-weight:700;letter-spacing:1px;margin:6px 0">HIER</div>
+            <div class="bet-card">
+              <div class="bet-header"><div style="display:flex;align-items:center;gap:4px"><span class="sport-icon">🏀</span><div class="bet-match">Lakers vs Celtics</div></div><div class="bet-badge badge-cashout">💰 Cash out</div></div>
+              <div class="bet-meta">Bet99 · 26 fév</div>
+              <div class="bet-details"><div class="bet-cote">1.65</div><div class="bet-mise">40,00 $</div><div class="bet-selection">Lakers gagnent</div><div class="bet-result res-pos">+18,00 $</div></div>
+            </div>
+            <div class="bet-card">
+              <div class="bet-header"><div style="display:flex;align-items:center;gap:4px"><span class="sport-icon">🎾</span><div class="bet-match">Djokovic vs Alcaraz</div></div><div class="bet-badge badge-lost">✗ Perdu</div></div>
+              <div class="bet-meta">Mise-o-jeu · 26 fév</div>
+              <div class="bet-details"><div class="bet-cote">2.40</div><div class="bet-mise">25,00 $</div><div class="bet-selection">Djokovic gagne</div><div class="bet-result res-neg">-25,00 $</div></div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tb"><div class="tb-icon">🏠</div><div class="tb-lbl">Accueil</div></div>
+            <div class="tb"><div class="tb-icon active">📋</div><div class="tb-lbl active">Historique</div></div>
+            <div class="tb"><div class="tb-add"><span style="color:#fff;font-size:14px">+</span></div><div class="tb-lbl"> </div></div>
+            <div class="tb"><div class="tb-icon">📊</div><div class="tb-lbl">Stats</div></div>
+            <div class="tb"><div class="tb-icon">👤</div><div class="tb-lbl">Profil</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS & PROFILE -->
+  <div class="section">
+    <div class="section-header">06 — STATS & PROFIL</div>
+    <div class="phones-row">
+
+      <!-- Stats -->
+      <div>
+        <div style="color:#64748b;font-size:8px;text-align:center;margin-bottom:6px;font-weight:600">STATISTIQUES</div>
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>▲▲▲</span></div>
+          <div class="screen">
+            <div style="color:#fff;font-size:16px;font-weight:900;margin-bottom:8px;margin-top:4px">Statistiques</div>
+            <div class="history-filters" style="margin-bottom:10px">
+              <div class="hf-chip" style="background:#1a1a2e;border:1px solid #2a2a45;color:#94a3b8">7J</div>
+              <div class="hf-chip hf-active">1M</div>
+              <div class="hf-chip" style="background:#1a1a2e;border:1px solid #2a2a45;color:#94a3b8">3M</div>
+              <div class="hf-chip" style="background:#1a1a2e;border:1px solid #2a2a45;color:#94a3b8">1A</div>
+            </div>
+            <div class="stats-grid">
+              <div class="stat-card"><div class="stat-emoji">📈</div><div class="stat-val" style="color:#22c55e">+8,4 %</div><div class="stat-lbl">ROI</div></div>
+              <div class="stat-card"><div class="stat-emoji">🎯</div><div class="stat-val" style="color:#a78bfa">61 %</div><div class="stat-lbl">Taux de réussite</div></div>
+              <div class="stat-card"><div class="stat-emoji">💰</div><div class="stat-val" style="color:#22c55e">+128 $</div><div class="stat-lbl">Profit ce mois</div></div>
+              <div class="stat-card"><div class="stat-emoji">🏆</div><div class="stat-val" style="color:#f59e0b">18</div><div class="stat-lbl">Paris gagnés</div></div>
+              <div class="stat-card"><div class="stat-emoji">📊</div><div class="stat-val" style="color:#00d4a8">1,85</div><div class="stat-lbl">Cote moyenne</div></div>
+              <div class="stat-card"><div class="stat-emoji">💸</div><div class="stat-val" style="color:#a78bfa">47,50 $</div><div class="stat-lbl">Mise moyenne</div></div>
+            </div>
+            <div class="section-title">Par sport</div>
+            <div class="stats-sport-row">
+              <div class="sport-stat-item">
+                <div class="ss-left"><span style="font-size:12px">⚽</span><div><div class="ss-name">Football</div><div class="ss-count">18 paris</div></div></div>
+                <div style="display:flex;align-items:center;gap:6px"><div class="ss-bar-wrap"><div class="ss-bar" style="width:75%"></div></div><div class="ss-pct">67 %</div></div>
+              </div>
+              <div class="sport-stat-item">
+                <div class="ss-left"><span style="font-size:12px">🏀</span><div><div class="ss-name">NBA</div><div class="ss-count">12 paris</div></div></div>
+                <div style="display:flex;align-items:center;gap:6px"><div class="ss-bar-wrap"><div class="ss-bar" style="width:58%"></div></div><div class="ss-pct">58 %</div></div>
+              </div>
+              <div class="sport-stat-item">
+                <div class="ss-left"><span style="font-size:12px">🏒</span><div><div class="ss-name">NHL</div><div class="ss-count">9 paris</div></div></div>
+                <div style="display:flex;align-items:center;gap:6px"><div class="ss-bar-wrap"><div class="ss-bar" style="width:44%"></div></div><div class="ss-pct">44 %</div></div>
+              </div>
+              <div class="sport-stat-item">
+                <div class="ss-left"><span style="font-size:12px">🎾</span><div><div class="ss-name">Tennis</div><div class="ss-count">8 paris</div></div></div>
+                <div style="display:flex;align-items:center;gap:6px"><div class="ss-bar-wrap"><div class="ss-bar" style="width:38%"></div></div><div class="ss-pct">38 %</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tb"><div class="tb-icon">🏠</div><div class="tb-lbl">Accueil</div></div>
+            <div class="tb"><div class="tb-icon">📋</div><div class="tb-lbl">Historique</div></div>
+            <div class="tb"><div class="tb-add"><span style="color:#fff;font-size:14px">+</span></div><div class="tb-lbl"> </div></div>
+            <div class="tb"><div class="tb-icon active">📊</div><div class="tb-lbl active">Stats</div></div>
+            <div class="tb"><div class="tb-icon">👤</div><div class="tb-lbl">Profil</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile -->
+      <div>
+        <div style="color:#64748b;font-size:8px;text-align:center;margin-bottom:6px;font-weight:600">PROFIL</div>
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>▲▲▲</span></div>
+          <div class="screen">
+            <div style="color:#fff;font-size:16px;font-weight:900;margin-bottom:10px;margin-top:4px">Profil</div>
+            <div class="profile-header">
+              <div class="avatar">🧑</div>
+              <div><div class="profile-name">Mathieu</div><div class="profile-email">mathieu@example.com</div></div>
+            </div>
+            <div class="bankroll-card">
+              <div class="bk-lbl">BANKROLL ACTUELLE</div>
+              <div><span class="bk-amount">2 340,50</span><br><span class="bk-currency">$</span></div>
+              <div class="bk-depart">Départ : 2 000,00 $</div>
+              <div class="bk-stats-row">
+                <div class="bk-stat"><div class="bk-stat-val" style="color:#22c55e">+340,50 $</div><div class="bk-stat-lbl">PROFIT TOTAL</div></div>
+                <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
+                <div class="bk-stat"><div class="bk-stat-val" style="color:#a78bfa">+17,0 %</div><div class="bk-stat-lbl">CROISSANCE</div></div>
+              </div>
+            </div>
+            <div class="section-title">Paramètres</div>
+            <div class="settings-section">
+              <div class="setting-item"><div class="si-left"><span class="si-icon">💰</span><div><div class="si-name">Bankroll de départ</div><div class="si-val">2 000,00 $</div></div></div><span class="si-arrow">›</span></div>
+              <div class="setting-item"><div class="si-left"><span class="si-icon">🌍</span><div><div class="si-name">Devise</div><div class="si-val">CAD $</div></div></div><span class="si-arrow">›</span></div>
+              <div class="setting-item"><div class="si-left"><span class="si-icon">🔔</span><div><div class="si-name">Notifications</div><div class="si-val">Activées</div></div></div><span class="si-arrow">›</span></div>
+              <div class="setting-item"><div class="si-left"><span class="si-icon">🔒</span><div><div class="si-name">Mot de passe</div><div class="si-val">Modifier</div></div></div><span class="si-arrow">›</span></div>
+            </div>
+            <div class="logout-btn">Se déconnecter</div>
+          </div>
+          <div class="tabbar">
+            <div class="tb"><div class="tb-icon">🏠</div><div class="tb-lbl">Accueil</div></div>
+            <div class="tb"><div class="tb-icon">📋</div><div class="tb-lbl">Historique</div></div>
+            <div class="tb"><div class="tb-add"><span style="color:#fff;font-size:14px">+</span></div><div class="tb-lbl"> </div></div>
+            <div class="tb"><div class="tb-icon">📊</div><div class="tb-lbl">Stats</div></div>
+            <div class="tb"><div class="tb-icon active">👤</div><div class="tb-lbl active">Profil</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="text-align:center;color:#2a2a45;font-size:8px;margin-top:8px">BETTRACK · MAQUETTE COMPLÈTE · V1.0</div>
+</div>

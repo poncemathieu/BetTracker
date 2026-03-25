@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BetTrack — Maquette Complète</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d14;
+    --surface: #13131f;
+    --surface2: #1a1a2e;
+    --surface3: #1f1f35;
+    --purple: #7c3aed;
+    --purple-light: #a855f7;
+    --purple-glow: rgba(124, 58, 237, 0.3);
+    --accent: #c084fc;
+    --text: #f0eeff;
+    --muted: #6b6b8a;
+    --border: rgba(124, 58, 237, 0.2);
+    --success: #22d3ee;
+    --success-bg: rgba(34, 211, 238, 0.1);
+    --error: #f87171;
+    --error-bg: rgba(248, 113, 113, 0.1);
+    --warning: #fbbf24;
+    --warning-bg: rgba(251, 191, 36, 0.1);
+    --cashout: #a3e635;
+    --cashout-bg: rgba(163, 230, 53, 0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 60px 40px;
+  }
+
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.08;
+    pointer-events: none;
+  }
+  .bg-orb-1 { width: 600px; height: 600px; background: var(--purple); top: -200px; left: -150px; }
+  .bg-orb-2 { width: 500px; height: 500px; background: #1d4ed8; bottom: -150px; right: -100px; }
+
+  .grid-overlay {
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(124,58,237,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,58,237,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* Page header */
+  .page-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .page-brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .page-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--text), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 4px;
+  }
+
+  .page-sub {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 64px;
+  }
+
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--purple);
+  }
+
+  .phones-row {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .phone-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .phone-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* Phone */
+  .phone {
+    width: 320px;
+    height: 693px;
+    background: var(--surface);
+    border-radius: 44px;
+    border: 1px solid var(--border);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.04),
+      0 32px 64px rgba(0,0,0,0.6),
+      0 0 50px var(--purple-glow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .notch {
+    width: 100px; height: 28px;
+    background: #000;
+    border-radius: 0 0 16px 16px;
+    margin: 0 auto;
+    flex-shrink: 0;
+  }
+
+  .screen {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+
+  /* ========== SHARED COMPONENTS ========== */
+  .bottom-nav {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+  }
+
+  .nav-icon { font-size: 20px; filter: grayscale(1) opacity(0.4); }
+  .nav-item.active .nav-icon { filter: none; }
+  .nav-label { font-size: 9px; color: var(--muted); font-weight: 500; }
+  .nav-item.active .nav-label { color: var(--accent); }
+
+  .nav-add {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 4px 20px var(--purple-glow);
+    margin-top: -18px;
+  }
+
+  .bottom-bar {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .home-indicator {
+    width: 100px; height: 4px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px;
+  }
+
+  /* ========== ONBOARDING ========== */
+  .onb-screen {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .logo-box {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, var(--purple), var(--accent));
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin: 0 auto 10px;
+    box-shadow: 0 8px 24px var(--purple-glow);
+  }
+
+  .onb-logo-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    text-align: center;
+    background: linear-gradient(135deg, var(--text), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .onb-logo-sub {
+    font-size: 9px;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .onb-feat {
+    background: var(--surface2);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .onb-feat-left { display: flex; align-items: center; gap: 10px; }
+  .onb-feat-icon { font-size: 18px; }
+  .onb-feat-title { font-size: 11px; font-weight: 600; }
+  .onb-feat-desc { font-size: 9px; color: var(--muted); margin-top: 1px; }
+  .onb-feat-val { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin: 12px 0;
+  }
+
+  .dot {
+    width: 5px; height: 5px;
+    border-radius: 3px;
+    background: var(--border);
+  }
+
+  .dot.active {
+    width: 16px;
+    background: var(--purple);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    border: none;
+    border-radius: 14px;
+    padding: 14px;
+    color: white;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 6px;
+    box-shadow: 0 6px 20px var(--purple-glow);
+  }
+
+  .btn-link {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .btn-link span { color: var(--accent); }
+
+  /* Onboarding step label */
+  .step-label {
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .onb-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .onb-subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .feat-card {
+    background: var(--surface2);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .feat-icon { font-size: 20px; }
+  .feat-title { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+  .feat-desc { font-size: 10px; color: var(--muted); line-height: 1.4; }
+
+  /* Config */
+  .field-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    margin-top: 12px;
+    font-weight: 500;
+  }
+
+  .devise-row { display: flex; gap: 6px; }
+
+  .devise-chip {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 4px;
+    text-align: center;
+  }
+
+  .devise-chip.active {
+    background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(168,85,247,0.2));
+    border-color: var(--purple);
+  }
+
+  .devise-sym { font-size: 14px; font-weight: 700; }
+  .devise-lbl { font-size: 8px; color: var(--muted); }
+
+  .montant-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .montant-sym { color: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; }
+  .montant-val { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; }
+
+  .rapides-row { display: flex; gap: 6px; }
+
+  .rapide-chip {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 7px 4px;
+    text-align: center;
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .rapide-chip.active {
+    border-color: var(--purple);
+    color: var(--accent);
+    background: rgba(124,58,237,0.1);
+  }
+
+  .conseil-box {
+    background: rgba(34,211,238,0.06);
+    border: 1px solid rgba(34,211,238,0.2);
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }
+
+  .conseil-text {
+    font-size: 10px;
+    color: var(--success);
+    line-height: 1.5;
+  }
+
+  /* ========== AUTH ========== */
+  .auth-screen {
+    padding: 0 20px 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tabs {
+    display: flex;
+    background: var(--surface2);
+    border-radius: 14px;
+    padding: 3px;
+    margin-bottom: 20px;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 9px;
+    text-align: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    border-radius: 12px;
+  }
+
+  .tab.active {
+    background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    color: white;
+    box-shadow: 0 4px 12px var(--purple-glow);
+  }
+
+  .field-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .field-input::placeholder { color: var(--muted); }
+
+  .forgot {
+    text-align: right;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 12px;
+    margin-top: -4px;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+  }
+
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-text { font-size: 10px; color: var(--muted); }
+
+  .social-row { display: flex; gap: 10px; }
+
+  .btn-social {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .field-row { display: flex; gap: 8px; }
+  .field-row .field { flex: 1; }
+
+  /* ========== DASHBOARD ========== */
+  .dash-screen { padding: 0; }
+
+  .dash-header {
+    padding: 14px 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .greeting { font-size: 11px; color: var(--muted); }
+
+  .username {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 4px 12px var(--purple-glow);
+    position: relative;
+  }
+
+  .avatar-notif {
+    position: absolute;
+    top: 0; right: 0;
+    width: 10px; height: 10px;
+    background: var(--error);
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+  }
+
+  .bankroll-card {
+    margin: 0 16px 14px;
+    background: linear-gradient(135deg, #1e1040, #2d1b69);
+    border-radius: 22px;
+    padding: 20px;
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    box-shadow: 0 12px 32px rgba(124, 58, 237, 0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bankroll-card::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(168,85,247,0.25), transparent);
+    border-radius: 50%;
+  }
+
+  .bk-label {
+    font-size: 9px;
+    color: rgba(192, 132, 252, 0.8);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .bk-amount {
+    font-family: 'Syne', sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .bk-initial {
+    font-size: 11px;
+    color: rgba(192, 132, 252, 0.6);
+    margin-bottom: 16px;
+  }
+
+  .bk-stats {
+    display: flex;
+    gap: 12px;
+  }
+
+  .bk-stat { display: flex; flex-direction: column; gap: 2px; }
+
+  .bk-stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .bk-stat-val.positive { color: var(--success); }
+  .bk-stat-val.accent { color: var(--accent); }
+
+  .bk-stat-label {
+    font-size: 9px;
+    color: rgba(192, 132, 252, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .bk-divider { width: 1px; background: rgba(124,58,237,0.3); margin: 0 2px; }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 0 20px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .section-link { font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--accent); font-weight: 400; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 16px;
+  }
+
+  .stat-card {
+    background: var(--surface2);
+    border-radius: 16px;
+    padding: 14px;
+    border: 1px solid var(--border);
+  }
+
+  .stat-icon { font-size: 18px; margin-bottom: 8px; }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 3px;
+  }
+
+  .stat-value.positive { color: var(--success); }
+  .stat-value.purple { color: var(--accent); }
+  .stat-value.warning { color: var(--warning); }
+
+  .stat-label { font-size: 10px; color: var(--muted); }
+
+  .chart-container {
+    margin: 14px 16px 0;
+    background: var(--surface2);
+    border-radius: 18px;
+    padding: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .chart-title { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; }
+
+  .chart-filters { display: flex; gap: 5px; }
+
+  .chart-filter {
+    font-size: 9px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    color: var(--muted);
+    background: var(--surface3);
+  }
+
+  .chart-filter.active { background: var(--purple); color: white; }
+
+  .chart-svg { width: 100%; height: 90px; }
+
+  .chart-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+  }
+
+  .chart-label { font-size: 9px; color: var(--muted); }
+
+  /* ========== ADD BET ========== */
+  .add-screen { padding: 0 20px; }
+
+  .add-header {
+    padding: 14px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-back {
+    width: 34px; height: 34px;
+    background: var(--surface2);
+    border-radius: 11px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  .add-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .sport-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+    margin-bottom: 14px;
+  }
+  .sport-scroll::-webkit-scrollbar { display: none; }
+
+  .sport-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 13px;
+    background: var(--surface2);
+    border-radius: 15px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+    min-width: 60px;
+  }
+
+  .sport-chip.active {
+    background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(168,85,247,0.2));
+    border-color: var(--purple);
+    box-shadow: 0 4px 12px var(--purple-glow);
+  }
+
+  .sport-emoji { font-size: 20px; }
+  .sport-name { font-size: 9px; color: var(--muted); font-weight: 500; }
+  .sport-chip.active .sport-name { color: var(--accent); }
+
+  .add-section-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .add-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 11px 13px;
+    color: var(--text);
+    font-size: 12px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .add-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .add-row .add-field { flex: 1; }
+
+  .type-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .type-chip {
+    padding: 8px 6px;
+    background: var(--surface2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    text-align: center;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .type-chip.active {
+    background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(168,85,247,0.2));
+    border-color: var(--purple);
+    color: var(--accent);
+  }
+
+  .mise-card {
+    background: var(--surface2);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+
+  .mise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .mise-title { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; }
+  .mise-bankroll { font-size: 10px; color: var(--muted); }
+  .mise-bankroll span { color: var(--accent); font-weight: 600; }
+
+  .mise-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .mise-input-wrap { position: relative; flex: 0 0 auto; }
+
+  .mise-currency {
+    position: absolute;
+    left: 11px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+  }
+
+  .mise-input {
+    background: var(--surface3);
+    border: 1px solid var(--purple);
+    border-radius: 12px;
+    padding: 11px 11px 11px 28px;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    width: 90px;
+    box-shadow: 0 0 0 3px var(--purple-glow);
+  }
+
+  .mise-pct-chips { display: flex; gap: 5px; }
+
+  .mise-pct {
+    padding: 5px 9px;
+    background: var(--surface3);
+    border-radius: 20px;
+    font-size: 10px;
+    color: var(--muted);
+    border: 1px solid transparent;
+  }
+
+  .mise-pct.active {
+    background: rgba(124,58,237,0.2);
+    border-color: var(--purple);
+    color: var(--accent);
+  }
+
+  .mise-gains {
+    display: flex;
+    justify-content: space-between;
+    background: var(--surface3);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+
+  .mise-gain-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+
+  .mise-gain-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .mise-gain-val.positive { color: var(--success); }
+  .mise-gain-label { font-size: 9px; color: var(--muted); }
+
+  /* ========== HISTORY ========== */
+  .hist-screen { padding: 0; }
+
+  .hist-header {
+    padding: 14px 20px 10px;
+  }
+
+  .hist-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .hist-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .hist-actions { display: flex; gap: 6px; }
+
+  .btn-icon {
+    width: 34px; height: 34px;
+    background: var(--surface2);
+    border-radius: 11px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+  }
+
+  .search-wrap { position: relative; margin-bottom: 12px; }
+  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; color: var(--muted); }
+
+  .search-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px 10px 36px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    width: 100%;
+  }
+
+  .search-input::placeholder { color: var(--muted); }
+
+  .status-filters {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .status-filters::-webkit-scrollbar { display: none; }
+
+  .status-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    flex-shrink: 0;
+    border: 1px solid transparent;
+    color: var(--muted);
+    background: var(--surface2);
+    border-color: var(--border);
+  }
+
+  .status-chip.all.active { background: rgba(124,58,237,0.2); border-color: var(--purple); color: var(--accent); }
+  .status-chip.won.active { background: var(--success-bg); border-color: var(--success); color: var(--success); }
+  .status-chip.lost.active { background: var(--error-bg); border-color: var(--error); color: var(--error); }
+  .status-chip.pending.active { background: var(--warning-bg); border-color: var(--warning); color: var(--warning); }
+  .status-chip.cashout.active { background: var(--cashout-bg); border-color: var(--cashout); color: var(--cashout); }
+
+  .sport-filters {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 20px 12px;
+  }
+  .sport-filters::-webkit-scrollbar { display: none; }
+
+  .sport-filter {
+    padding: 5px 11px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 500;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .sport-filter.active {
+    background: rgba(124,58,237,0.2);
+    border-color: var(--purple);
+    color: var(--accent);
+  }
+
+  .summary-bar {
+    margin: 0 20px 12px;
+    background: var(--surface2);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .summary-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+
+  .summary-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .summary-val.positive { color: var(--success); }
+  .summary-val.accent { color: var(--accent); }
+  .summary-label { font-size: 9px; color: var(--muted); }
+
+  .bet-list {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .date-sep {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 4px 0 2px;
+  }
+
+  .bet-card {
+    background: var(--surface2);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    padding: 13px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bet-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .bet-card.won::before { background: var(--success); }
+  .bet-card.lost::before { background: var(--error); }
+  .bet-card.pending::before { background: var(--warning); }
+  .bet-card.cashout::before { background: var(--cashout); }
+
+  .bet-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .bet-sport-match { display: flex; align-items: center; gap: 7px; flex: 1; min-width: 0; }
+  .bet-sport-icon { font-size: 16px; flex-shrink: 0; }
+  .bet-match { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bet-bookmaker { font-size: 9px; color: var(--muted); margin-top: 1px; }
+
+  .bet-badge {
+    padding: 4px 9px;
+    border-radius: 20px;
+    font-size: 9px;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-left: 6px;
+  }
+
+  .badge-won { background: var(--success-bg); color: var(--success); }
+  .badge-lost { background: var(--error-bg); color: var(--error); }
+  .badge-pending { background: var(--warning-bg); color: var(--warning); }
+  .badge-cashout { background: var(--cashout-bg); color: var(--cashout); }
+
+  .bet-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .bet-details { display: flex; gap: 10px; }
+
+  .bet-detail-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .bet-detail-label { font-size: 8px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .bet-selection {
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--surface3);
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+
+  .bet-result {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .bet-result.positive { color: var(--success); }
+  .bet-result.negative { color: var(--error); }
+  .bet-result.cashout-col { color: var(--cashout); }
+  .bet-result.pending-col { color: var(--warning); }
+
+  /* ========== STATS ========== */
+  .stats-screen { padding: 0 20px; }
+
+  .stats-header {
+    padding: 14px 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .stats-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .period-filters { display: flex; gap: 5px; }
+
+  .period-chip {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    font-weight: 600;
+  }
+
+  .period-chip.active { background: var(--purple); color: white; border-color: var(--purple); }
+
+  .stats-big-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .stats-big-card {
+    background: var(--surface2);
+    border-radius: 16px;
+    padding: 14px;
+    border: 1px solid var(--border);
+  }
+
+  .sbc-icon { font-size: 18px; margin-bottom: 6px; }
+
+  .sbc-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 2px;
+  }
+
+  .sbc-value.green { color: var(--success); }
+  .sbc-value.purple { color: var(--accent); }
+  .sbc-value.yellow { color: var(--warning); }
+  .sbc-value.cyan { color: #00d4a8; }
+
+  .sbc-label { font-size: 10px; color: var(--muted); }
+
+  .sport-stats-section { margin-bottom: 14px; }
+
+  .sport-stat-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .sport-stat-item {
+    background: var(--surface2);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 11px 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 7px;
+  }
+
+  .ssi-left { display: flex; align-items: center; gap: 10px; }
+  .ssi-emoji { font-size: 16px; }
+  .ssi-name { font-size: 12px; font-weight: 600; }
+  .ssi-count { font-size: 9px; color: var(--muted); margin-top: 1px; }
+
+  .ssi-right { display: flex; align-items: center; gap: 8px; }
+
+  .ssi-bar-wrap {
+    width: 70px; height: 4px;
+    background: var(--surface3);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .ssi-bar { height: 4px; border-radius: 2px; background: var(--purple); }
+
+  .ssi-pct {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 32px;
+    text-align: right;
+  }
+
+  /* ========== PROFILE ========== */
+  .profile-screen { padding: 0 20px; }
+
+  .profile-header-wrap {
+    padding: 14px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .profile-avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 6px 20px var(--purple-glow);
+    position: relative;
+  }
+
+  .profile-avatar-notif {
+    position: absolute;
+    top: 0; right: 0;
+    width: 14px; height: 14px;
+    background: var(--success);
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7px;
+  }
+
+  .profile-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .profile-email { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .profile-badge {
+    display: inline-block;
+    background: rgba(124,58,237,0.2);
+    border: 1px solid var(--purple);
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 9px;
+    color: var(--accent);
+    margin-top: 4px;
+  }
+
+  .profile-bankroll-card {
+    background: linear-gradient(135deg, #1e1040, #2d1b69);
+    border-radius: 20px;
+    padding: 16px;
+    border: 1px solid rgba(124,58,237,0.3);
+    box-shadow: 0 10px 28px rgba(124,58,237,0.18);
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .profile-bankroll-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 130px; height: 130px;
+    background: radial-gradient(circle, rgba(168,85,247,0.25), transparent);
+    border-radius: 50%;
+  }
+
+  .pbk-label { font-size: 9px; color: rgba(192,132,252,0.8); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
+  .pbk-amount { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 2px; }
+  .pbk-currency { font-size: 10px; color: rgba(192,132,252,0.6); }
+  .pbk-initial { font-size: 10px; color: rgba(192,132,252,0.5); margin-bottom: 12px; }
+
+  .pbk-stats { display: flex; gap: 12px; }
+  .pbk-stat { display: flex; flex-direction: column; gap: 1px; }
+  .pbk-stat-val { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; }
+  .pbk-stat-val.green { color: var(--success); }
+  .pbk-stat-val.accent { color: var(--accent); }
+  .pbk-stat-label { font-size: 8px; color: rgba(192,132,252,0.5); text-transform: uppercase; letter-spacing: 0.8px; }
+  .pbk-divider { width: 1px; background: rgba(124,58,237,0.3); }
+
+  .settings-section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 11px 13px;
+    margin-bottom: 7px;
+  }
+
+  .si-left { display: flex; align-items: center; gap: 10px; }
+
+  .si-icon-wrap {
+    width: 30px; height: 30px;
+    border-radius: 9px;
+    background: var(--surface3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  .si-name { font-size: 12px; font-weight: 600; }
+  .si-val { font-size: 10px; color: var(--muted); margin-top: 1px; }
+  .si-arrow { color: var(--muted); font-size: 14px; }
+
+  .toggle-wrap {
+    width: 34px; height: 20px;
+    background: var(--purple);
+    border-radius: 10px;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .toggle-dot { width: 16px; height: 16px; background: white; border-radius: 50%; }
+
+  .logout-btn {
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.3);
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+    color: var(--error);
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 4px;
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="grid-overlay"></div>
+
+<!-- Page header -->
+<div class="page-header">
+  <div class="page-brand">Maquette mobile</div>
+  <div class="page-title">BetTrack</div>
+  <div class="page-sub">TRACK · ANALYSE · STRATEGIZE</div>
+</div>
+
+<!-- ===== 01 ONBOARDING ===== -->
+<div class="section">
+  <div class="section-label">01 — Onboarding</div>
+  <div class="phones-row">
+
+    <!-- Splash -->
+    <div class="phone-wrap">
+      <div class="phone-label">Splash</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="onb-screen" style="padding-top:24px">
+            <div class="logo-box">📈</div>
+            <div class="onb-logo-name">BetTrack</div>
+            <div class="onb-logo-sub">Analyse de paris sportifs</div>
+            <div style="flex:1">
+              <div class="onb-feat">
+                <div class="onb-feat-left"><div class="onb-feat-icon">📈</div><div><div class="onb-feat-title">Suivi de bankroll</div><div class="onb-feat-desc">Visualisez votre évolution</div></div></div>
+                <div class="onb-feat-val" style="color:#22d3ee">+17%</div>
+              </div>
+              <div class="onb-feat">
+                <div class="onb-feat-left"><div class="onb-feat-icon">🎯</div><div><div class="onb-feat-title">ROI en temps réel</div><div class="onb-feat-desc">Mesurez votre rentabilité</div></div></div>
+                <div class="onb-feat-val" style="color:#22d3ee">+8,4%</div>
+              </div>
+              <div class="onb-feat">
+                <div class="onb-feat-left"><div class="onb-feat-icon">🏆</div><div><div class="onb-feat-title">Taux de réussite</div><div class="onb-feat-desc">Analysez vos performances</div></div></div>
+                <div class="onb-feat-val" style="color:#fbbf24">61%</div>
+              </div>
+            </div>
+            <div class="pagination"><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div>
+            <div class="btn-primary">Commencer →</div>
+            <div class="btn-link">Déjà un compte ? <span>Se connecter</span></div>
+          </div>
+        </div>
+        <div class="bottom-bar"><div class="home-indicator"></div></div>
+      </div>
+    </div>
+
+    <!-- Fonctionnalités -->
+    <div class="phone-wrap">
+      <div class="phone-label">Fonctionnalités</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="onb-screen">
+            <div class="step-label">Étape 1 sur 3</div>
+            <div class="onb-title">Gérez vos paris <span style="color:var(--accent)">intelligemment</span></div>
+            <div class="onb-subtitle">BetTracker vous aide à analyser vos performances et optimiser votre stratégie.</div>
+            <div class="feat-card"><div class="feat-icon">📊</div><div><div class="feat-title">Dashboard complet</div><div class="feat-desc">Bankroll, ROI, taux de réussite et évolution en un coup d'œil.</div></div></div>
+            <div class="feat-card"><div class="feat-icon">⚡</div><div><div class="feat-title">Enregistrement rapide</div><div class="feat-desc">Ajoutez un pari en quelques secondes avec calcul automatique.</div></div></div>
+            <div class="feat-card"><div class="feat-icon">🏅</div><div><div class="feat-title">Statistiques avancées</div><div class="feat-desc">Analysez vos résultats par sport, bookmaker et période.</div></div></div>
+            <div style="flex:1"></div>
+            <div class="pagination"><div class="dot"></div><div class="dot active"></div><div class="dot"></div></div>
+            <div class="btn-primary">Suivant →</div>
+            <div class="btn-link">Passer</div>
+          </div>
+        </div>
+        <div class="bottom-bar"><div class="home-indicator"></div></div>
+      </div>
+    </div>
+
+    <!-- Configuration -->
+    <div class="phone-wrap">
+      <div class="phone-label">Configuration</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="onb-screen">
+            <div class="step-label">Étape 3 sur 3</div>
+            <div class="onb-title">Configurez votre <span style="color:var(--accent)">bankroll 💰</span></div>
+            <div class="onb-subtitle">Entrez votre mise de départ. Vous pourrez modifier cela plus tard dans les paramètres.</div>
+            <div class="field-label">Devise</div>
+            <div class="devise-row">
+              <div class="devise-chip"><div class="devise-sym">€</div><div class="devise-lbl">EUR</div></div>
+              <div class="devise-chip active"><div class="devise-sym">$</div><div class="devise-lbl">CAD</div></div>
+              <div class="devise-chip"><div class="devise-sym">$</div><div class="devise-lbl">USD</div></div>
+              <div class="devise-chip"><div class="devise-sym">£</div><div class="devise-lbl">GBP</div></div>
+            </div>
+            <div class="field-label">Montant initial</div>
+            <div class="montant-input"><span class="montant-sym">$</span><span class="montant-val">2 000</span></div>
+            <div class="field-label">Montants rapides</div>
+            <div class="rapides-row">
+              <div class="rapide-chip">500 $</div>
+              <div class="rapide-chip">1 000 $</div>
+              <div class="rapide-chip active">2 000 $</div>
+              <div class="rapide-chip">5 000 $</div>
+            </div>
+            <div class="conseil-box"><span style="font-size:16px">💡</span><div class="conseil-text">Conseil : Ne misez jamais plus de 5% de votre bankroll sur un seul pari. BetTracker vous y aidera.</div></div>
+            <div class="btn-primary">✓ Commencer à tracker</div>
+            <div class="btn-link">Vous pouvez modifier cela à tout moment</div>
+          </div>
+        </div>
+        <div class="bottom-bar"><div class="home-indicator"></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== 02 AUTH ===== -->
+<div class="section">
+  <div class="section-label">02 — Authentification</div>
+  <div class="phones-row">
+
+    <!-- Login -->
+    <div class="phone-wrap">
+      <div class="phone-label">Connexion</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="auth-screen">
+            <div style="display:flex;flex-direction:column;align-items:center;padding:24px 0 20px">
+              <div class="logo-box" style="width:50px;height:50px;border-radius:16px;font-size:22px">📈</div>
+              <div class="onb-logo-name" style="font-size:20px">BetTrack</div>
+              <div class="onb-logo-sub">Analyse de paris sportifs</div>
+            </div>
+            <div class="tabs">
+              <div class="tab active">Connexion</div>
+              <div class="tab">Inscription</div>
+            </div>
+            <div class="field-label" style="margin-top:0">Email</div>
+            <input class="field-input" type="email" placeholder="mathieu@example.com" value="mathieu@example.com">
+            <div class="field-label">Mot de passe</div>
+            <input class="field-input" type="password" value="••••••••">
+            <div class="forgot">Mot de passe oublié ?</div>
+            <div class="btn-primary">Se connecter</div>
+            <div class="divider"><div class="divider-line"></div><div class="divider-text">ou continuer avec</div><div class="divider-line"></div></div>
+            <div class="social-row">
+              <div class="btn-social">🍎 Apple</div>
+              <div class="btn-social">🔵 Google</div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-bar"><div class="home-indicator"></div></div>
+      </div>
+    </div>
+
+    <!-- Register -->
+    <div class="phone-wrap">
+      <div class="phone-label">Inscription</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="auth-screen" style="padding-top:16px">
+            <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:14px">Créer un compte</div>
+            <div class="tabs">
+              <div class="tab">Connexion</div>
+              <div class="tab active">Inscription</div>
+            </div>
+            <div class="field-row">
+              <div class="field"><div class="field-label" style="margin-top:0">Prénom</div><input class="field-input" value="Mathieu" style="margin-bottom:0"></div>
+              <div class="field"><div class="field-label" style="margin-top:0">Nom</div><input class="field-input" value="Tremblay" style="margin-bottom:0"></div>
+            </div>
+            <div class="field-label">Email</div>
+            <input class="field-input" value="mathieu@example.com">
+            <div class="field-label">Mot de passe</div>
+            <input class="field-input" type="password" value="••••••••">
+            <div class="field-label">Confirmer</div>
+            <input class="field-input" type="password" value="••••••••">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+              <div style="width:16px;height:16px;border-radius:5px;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">✓</div>
+              <span style="font-size:10px;color:var(--muted)">J'accepte les <span style="color:var(--accent)">Conditions d'utilisation</span></span>
+            </div>
+            <div class="btn-primary">Créer mon compte</div>
+            <div class="divider"><div class="divider-line"></div><div class="divider-text">ou continuer avec</div><div class="divider-line"></div></div>
+            <div class="social-row">
+              <div class="btn-social">🍎 Apple</div>
+              <div class="btn-social">🔵 Google</div>
+            </div>
+            <div class="btn-link" style="margin-top:8px">Déjà un compte ? <span>Se connecter</span></div>
+          </div>
+        </div>
+        <div class="bottom-bar"><div class="home-indicator"></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== 03 DASHBOARD ===== -->
+<div class="section">
+  <div class="section-label">03 — Dashboard & Statistiques</div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">Dashboard</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="dash-screen">
+            <div class="dash-header">
+              <div><div class="greeting">Bonjour 👋</div><div class="username">Mathieu</div></div>
+              <div class="avatar">🧑<div class="avatar-notif"></div></div>
+            </div>
+            <div class="bankroll-card">
+              <div class="bk-label">Bankroll actuelle</div>
+              <div class="bk-amount">2 340,50 $</div>
+              <div class="bk-initial">Départ : 2 000,00 $</div>
+              <div class="bk-stats">
+                <div class="bk-stat"><div class="bk-stat-val positive">+340,50 $</div><div class="bk-stat-label">Profit total</div></div>
+                <div class="bk-divider"></div>
+                <div class="bk-stat"><div class="bk-stat-val accent">+17,0 %</div><div class="bk-stat-label">Croissance</div></div>
+                <div class="bk-divider"></div>
+                <div class="bk-stat"><div class="bk-stat-val">47</div><div class="bk-stat-label">Paris</div></div>
+              </div>
+            </div>
+            <div class="section-title">Statistiques <span class="section-link">Ce mois</span></div>
+            <div class="stats-grid">
+              <div class="stat-card"><div class="stat-icon">📈</div><div class="stat-value positive">+8,4 %</div><div class="stat-label">ROI</div></div>
+              <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-value purple">61 %</div><div class="stat-label">Taux de réussite</div></div>
+              <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value positive">+128,00 $</div><div class="stat-label">Profit ce mois</div></div>
+              <div class="stat-card"><div class="stat-icon">🏆</div><div class="stat-value warning">18</div><div class="stat-label">Paris ce mois</div></div>
+            </div>
+            <div class="section-title" style="padding-top:14px">Évolution bankroll</div>
+            <div class="chart-container">
+              <div class="chart-header">
+                <div class="chart-title">Historique</div>
+                <div class="chart-filters">
+                  <div class="chart-filter">7J</div>
+                  <div class="chart-filter active">1M</div>
+                  <div class="chart-filter">3M</div>
+                  <div class="chart-filter">1A</div>
+                </div>
+              </div>
+              <svg class="chart-svg" viewBox="0 0 260 90" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.4"/>
+                    <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <line x1="0" y1="25" x2="260" y2="25" stroke="rgba(124,58,237,0.1)" stroke-width="1"/>
+                <line x1="0" y1="50" x2="260" y2="50" stroke="rgba(124,58,237,0.1)" stroke-width="1"/>
+                <line x1="0" y1="75" x2="260" y2="75" stroke="rgba(124,58,237,0.1)" stroke-width="1"/>
+                <path d="M0,75 L50,70 L100,60 L130,65 L170,45 L210,35 L260,18 L260,90 L0,90Z" fill="url(#cg)"/>
+                <path d="M0,75 L50,70 L100,60 L130,65 L170,45 L210,35 L260,18" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="260" cy="18" r="4" fill="#c084fc" stroke="#1a1a2e" stroke-width="2"/>
+                <circle cx="130" cy="65" r="3.5" fill="#7c3aed" stroke="#1a1a2e" stroke-width="2"/>
+              </svg>
+              <div class="chart-labels">
+                <span class="chart-label">1 fév</span>
+                <span class="chart-label">8 fév</span>
+                <span class="chart-label">15 fév</span>
+                <span class="chart-label">22 fév</span>
+                <span class="chart-label">Auj.</span>
+              </div>
+            </div>
+            <div style="height:16px"></div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item active"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
+          <div class="nav-item"><div class="nav-icon">📋</div><div class="nav-label">Historique</div></div>
+          <div class="nav-add">+</div>
+          <div class="nav-item"><div class="nav-icon">📊</div><div class="nav-label">Stats</div></div>
+          <div class="nav-item"><div class="nav-icon">⚙️</div><div class="nav-label">Profil</div></div>
+        </div>
+        <div class="bottom-bar"><div class="home-indicator"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 04 ADD BET ===== -->
+<div class="section">
+  <div class="section-label">04 — Ajouter un pari</div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">Formulaire pari</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="add-screen">
+            <div class="add-header">
+              <div class="btn-back">←</div>
+              <div class="add-title">Nouveau pari</div>
+            </div>
+            <div class="add-section-label">Sport</div>
+            <div class="sport-scroll">
+              <div class="sport-chip active"><div class="sport-emoji">⚽</div><div class="sport-name">Football</div></div>
+              <div class="sport-chip"><div class="sport-emoji">🏒</div><div class="sport-name">NHL</div></div>
+              <div class="sport-chip"><div class="sport-emoji">🏀</div><div class="sport-name">NBA</div></div>
+              <div class="sport-chip"><div class="sport-emoji">🎾</div><div class="sport-name">Tennis</div></div>
+              <div class="sport-chip"><div class="sport-emoji">🏈</div><div class="sport-name">NFL</div></div>
+            </div>
+            <div class="add-section-label">Événement</div>
+            <div class="add-section-label" style="margin-top:4px">Match</div>
+            <input class="add-input" type="text" value="PSG vs Arsenal">
+            <div class="add-row">
+              <div class="add-field"><div class="add-section-label">Date</div><input class="add-input" style="margin-bottom:0" value="27 fév 2026"></div>
+              <div class="add-field"><div class="add-section-label">Bookmaker</div><input class="add-input" style="margin-bottom:0" value="Mise-o-jeu"></div>
+            </div>
+            <div class="add-section-label" style="margin-top:10px">Type de pari</div>
+            <div class="type-grid">
+              <div class="type-chip active">1X2</div>
+              <div class="type-chip">Over/Under</div>
+              <div class="type-chip">Handicap</div>
+              <div class="type-chip">Les deux marquent</div>
+              <div class="type-chip">Double chance</div>
+              <div class="type-chip">Autre</div>
+            </div>
+            <div class="add-row">
+              <div class="add-field"><div class="add-section-label">Sélection</div><input class="add-input" style="margin-bottom:0" value="PSG gagne"></div>
+              <div class="add-field"><div class="add-section-label">Cote</div><input class="add-input" style="margin-bottom:0" value="1.85"></div>
+            </div>
+            <div class="mise-card" style="margin-top:12px">
+              <div class="mise-header">
+                <div class="mise-title">Mise</div>
+                <div class="mise-bankroll">Bankroll : <span>2 340,50 $</span></div>
+              </div>
+              <div class="mise-input-row">
+                <div class="mise-input-wrap">
+                  <span class="mise-currency">$</span>
+                  <input class="mise-input" type="number" value="50">
+                </div>
+                <div class="mise-pct-chips">
+                  <div class="mise-pct">1%</div>
+                  <div class="mise-pct">2%</div>
+                  <div class="mise-pct active">5%</div>
+                  <div class="mise-pct">10%</div>
+                </div>
+              </div>
+              <div class="mise-gains">
+                <div class="mise-gain-item"><div class="mise-gain-val">50,00 $</div><div class="mise-gain-label">Mise</div></div>
+                <div class="mise-gain-item"><div class="mise-gain-val positive">+42,50 $</div><div class="mise-gain-label">Gain net</div></div>
+                <div class="mise-gain-item"><div class="mise-gain-val positive">92,50 $</div><div class="mise-gain-label">Retour total</div></div>
+              </div>
+            </div>
+            <div class="btn-primary" style="margin-bottom:16px">✅ Enregistrer le pari</div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
+          <div class="nav-item"><div class="nav-icon">📋</div><div class="nav-label">Historique</div></div>
+          <div class="nav-add">+</div>
+          <div class="nav-item"><div class="nav-icon">📊</div><div class="nav-label">Stats</div></div>
+          <div class="nav-item"><div class="nav-icon">⚙️</div><div class="nav-label">Profil</div></div>
+        </div>
+        <div class="bottom-bar"><div class="home-indicator"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 05 HISTORY ===== -->
+<div class="section">
+  <div class="section-label">05 — Historique des paris</div>
+  <div class="phones-row">
+    <div class="phone-wrap">
+      <div class="phone-label">Historique</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="hist-screen">
+            <div class="hist-header">
+              <div class="hist-header-top">
+                <div class="hist-title">Historique</div>
+                <div class="hist-actions">
+                  <div class="btn-icon">⬇️</div>
+                  <div class="btn-icon">🔽</div>
+                </div>
+              </div>
+              <div class="search-wrap">
+                <span class="search-icon">🔍</span>
+                <input class="search-input" placeholder="Rechercher un pari...">
+              </div>
+              <div class="status-filters">
+                <div class="status-chip all active">Tous (47)</div>
+                <div class="status-chip won">✅ Gagné (29)</div>
+                <div class="status-chip lost">❌ Perdu (12)</div>
+                <div class="status-chip pending">⏳ En cours (4)</div>
+              </div>
+            </div>
+            <div class="sport-filters">
+              <div class="sport-filter active">🌐 Tous</div>
+              <div class="sport-filter">⚽ Football</div>
+              <div class="sport-filter">🏒 NHL</div>
+              <div class="sport-filter">🏀 NBA</div>
+              <div class="sport-filter">🎾 Tennis</div>
+            </div>
+            <div class="summary-bar">
+              <div class="summary-item"><div class="summary-val accent">47</div><div class="summary-label">Total paris</div></div>
+              <div class="summary-item"><div class="summary-val positive">+340,50 $</div><div class="summary-label">Profit net</div></div>
+              <div class="summary-item"><div class="summary-val accent">61 %</div><div class="summary-label">Taux réussite</div></div>
+              <div class="summary-item"><div class="summary-val positive">+8,4 %</div><div class="summary-label">ROI</div></div>
+            </div>
+            <div class="bet-list">
+              <div class="date-sep">Aujourd'hui</div>
+              <div class="bet-card won">
+                <div class="bet-top">
+                  <div class="bet-sport-match"><div class="bet-sport-icon">⚽</div><div><div class="bet-match">PSG vs Arsenal</div><div class="bet-bookmaker">Mise-o-jeu · 27 fév</div></div></div>
+                  <div class="bet-badge badge-won">✅ Gagné</div>
+                </div>
+                <div class="bet-bottom">
+                  <div class="bet-details"><div><div class="bet-detail-val">1.85</div><div class="bet-detail-label">Cote</div></div><div><div class="bet-detail-val">50,00 $</div><div class="bet-detail-label">Mise</div></div></div>
+                  <div class="bet-selection">PSG gagne</div>
+                  <div class="bet-result positive">+42,50 $</div>
+                </div>
+              </div>
+              <div class="bet-card pending">
+                <div class="bet-top">
+                  <div class="bet-sport-match"><div class="bet-sport-icon">🏒</div><div><div class="bet-match">Canadiens vs Maple Leafs</div><div class="bet-bookmaker">Sports Interaction · 27 fév</div></div></div>
+                  <div class="bet-badge badge-pending">⏳ En cours</div>
+                </div>
+                <div class="bet-bottom">
+                  <div class="bet-details"><div><div class="bet-detail-val">2.10</div><div class="bet-detail-label">Cote</div></div><div><div class="bet-detail-val">30,00 $</div><div class="bet-detail-label">Mise</div></div></div>
+                  <div class="bet-selection">Over 5.5</div>
+                  <div class="bet-result pending-col">+33,00 $</div>
+                </div>
+              </div>
+              <div class="date-sep">Hier</div>
+              <div class="bet-card cashout">
+                <div class="bet-top">
+                  <div class="bet-sport-match"><div class="bet-sport-icon">🏀</div><div><div class="bet-match">Lakers vs Celtics</div><div class="bet-bookmaker">Bet99 · 26 fév</div></div></div>
+                  <div class="bet-badge badge-cashout">💰 Cash out</div>
+                </div>
+                <div class="bet-bottom">
+                  <div class="bet-details"><div><div class="bet-detail-val">1.65</div><div class="bet-detail-label">Cote</div></div><div><div class="bet-detail-val">40,00 $</div><div class="bet-detail-label">Mise</div></div></div>
+                  <div class="bet-selection">Lakers gagnent</div>
+                  <div class="bet-result cashout-col">+18,00 $</div>
+                </div>
+              </div>
+              <div class="bet-card lost">
+                <div class="bet-top">
+                  <div class="bet-sport-match"><div class="bet-sport-icon">🎾</div><div><div class="bet-match">Djokovic vs Alcaraz</div><div class="bet-bookmaker">Mise-o-jeu · 26 fév</div></div></div>
+                  <div class="bet-badge badge-lost">❌ Perdu</div>
+                </div>
+                <div class="bet-bottom">
+                  <div class="bet-details"><div><div class="bet-detail-val">2.40</div><div class="bet-detail-label">Cote</div></div><div><div class="bet-detail-val">25,00 $</div><div class="bet-detail-label">Mise</div></div></div>
+                  <div class="bet-selection">Djokovic gagne</div>
+                  <div class="bet-result negative">-25,00 $</div>
+                </div>
+              </div>
+              <div style="height:8px"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
+          <div class="nav-item active"><div class="nav-icon">📋</div><div class="nav-label">Historique</div></div>
+          <div class="nav-add">+</div>
+          <div class="nav-item"><div class="nav-icon">📊</div><div class="nav-label">Stats</div></div>
+          <div class="nav-item"><div class="nav-icon">⚙️</div><div class="nav-label">Profil</div></div>
+        </div>
+        <div class="bottom-bar"><div class="home-indicator"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 06 STATS & PROFILE ===== -->
+<div class="section">
+  <div class="section-label">06 — Stats & Profil</div>
+  <div class="phones-row">
+
+    <!-- Stats -->
+    <div class="phone-wrap">
+      <div class="phone-label">Statistiques</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="stats-screen">
+            <div class="stats-header">
+              <div class="stats-title">Statistiques</div>
+              <div class="period-filters">
+                <div class="period-chip">7J</div>
+                <div class="period-chip active">1M</div>
+                <div class="period-chip">3M</div>
+                <div class="period-chip">1A</div>
+              </div>
+            </div>
+            <div class="stats-big-grid">
+              <div class="stats-big-card"><div class="sbc-icon">📈</div><div class="sbc-value green">+8,4 %</div><div class="sbc-label">ROI</div></div>
+              <div class="stats-big-card"><div class="sbc-icon">🎯</div><div class="sbc-value purple">61 %</div><div class="sbc-label">Taux de réussite</div></div>
+              <div class="stats-big-card"><div class="sbc-icon">💰</div><div class="sbc-value green">+128,00 $</div><div class="sbc-label">Profit ce mois</div></div>
+              <div class="stats-big-card"><div class="sbc-icon">🏆</div><div class="sbc-value yellow">18</div><div class="sbc-label">Paris gagnés</div></div>
+              <div class="stats-big-card"><div class="sbc-icon">📊</div><div class="sbc-value cyan">1,85</div><div class="sbc-label">Cote moyenne</div></div>
+              <div class="stats-big-card"><div class="sbc-icon">💸</div><div class="sbc-value purple">47,50 $</div><div class="sbc-label">Mise moyenne</div></div>
+            </div>
+            <div class="sport-stats-section">
+              <div class="sport-stat-title">Par sport</div>
+              <div class="sport-stat-item">
+                <div class="ssi-left"><div class="ssi-emoji">⚽</div><div><div class="ssi-name">Football</div><div class="ssi-count">18 paris</div></div></div>
+                <div class="ssi-right"><div class="ssi-bar-wrap"><div class="ssi-bar" style="width:75%"></div></div><div class="ssi-pct">67 %</div></div>
+              </div>
+              <div class="sport-stat-item">
+                <div class="ssi-left"><div class="ssi-emoji">🏀</div><div><div class="ssi-name">NBA</div><div class="ssi-count">12 paris</div></div></div>
+                <div class="ssi-right"><div class="ssi-bar-wrap"><div class="ssi-bar" style="width:58%"></div></div><div class="ssi-pct">58 %</div></div>
+              </div>
+              <div class="sport-stat-item">
+                <div class="ssi-left"><div class="ssi-emoji">🏒</div><div><div class="ssi-name">NHL</div><div class="ssi-count">9 paris</div></div></div>
+                <div class="ssi-right"><div class="ssi-bar-wrap"><div class="ssi-bar" style="width:44%"></div></div><div class="ssi-pct">44 %</div></div>
+              </div>
+              <div class="sport-stat-item">
+                <div class="ssi-left"><div class="ssi-emoji">🎾</div><div><div class="ssi-name">Tennis</div><div class="ssi-count">8 paris</div></div></div>
+                <div class="ssi-right"><div class="ssi-bar-wrap"><div class="ssi-bar" style="width:38%"></div></div><div class="ssi-pct">38 %</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
+          <div class="nav-item"><div class="nav-icon">📋</div><div class="nav-label">Historique</div></div>
+          <div class="nav-add">+</div>
+          <div class="nav-item active"><div class="nav-icon">📊</div><div class="nav-label">Stats</div></div>
+          <div class="nav-item"><div class="nav-icon">⚙️</div><div class="nav-label">Profil</div></div>
+        </div>
+        <div class="bottom-bar"><div class="home-indicator"></div></div>
+      </div>
+    </div>
+
+    <!-- Profile -->
+    <div class="phone-wrap">
+      <div class="phone-label">Profil</div>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="profile-screen">
+            <div class="profile-header-wrap">
+              <div class="profile-avatar">🧑<div class="profile-avatar-notif">✓</div></div>
+              <div>
+                <div class="profile-name">Mathieu</div>
+                <div class="profile-email">mathieu@example.com</div>
+                <div class="profile-badge">Membre depuis fév. 2026</div>
+              </div>
+            </div>
+            <div class="profile-bankroll-card">
+              <div class="pbk-label">Bankroll actuelle</div>
+              <div class="pbk-amount">2 340,50</div>
+              <div class="pbk-currency">$ CAD</div>
+              <div class="pbk-initial">Départ : 2 000,00 $</div>
+              <div class="pbk-stats">
+                <div class="pbk-stat"><div class="pbk-stat-val green">+340,50 $</div><div class="pbk-stat-label">Profit total</div></div>
+                <div class="pbk-divider"></div>
+                <div class="pbk-stat"><div class="pbk-stat-val accent">+17,0 %</div><div class="pbk-stat-label">Croissance</div></div>
+                <div class="pbk-divider"></div>
+                <div class="pbk-stat"><div class="pbk-stat-val" style="color:#fff">47</div><div class="pbk-stat-label">Paris</div></div>
+              </div>
+            </div>
+            <div class="settings-section-title">Paramètres</div>
+            <div class="setting-item">
+              <div class="si-left"><div class="si-icon-wrap">💰</div><div><div class="si-name">Bankroll de départ</div><div class="si-val">2 000,00 $</div></div></div>
+              <div class="si-arrow">›</div>
+            </div>
+            <div class="setting-item">
+              <div class="si-left"><div class="si-icon-wrap">🌍</div><div><div class="si-name">Devise</div><div class="si-val">CAD — Dollar canadien</div></div></div>
+              <div class="si-arrow">›</div>
+            </div>
+            <div class="setting-item">
+              <div class="si-left"><div class="si-icon-wrap">🔔</div><div><div class="si-name">Notifications</div><div class="si-val">Activées</div></div></div>
+              <div class="toggle-wrap"><div class="toggle-dot"></div></div>
+            </div>
+            <div class="setting-item">
+              <div class="si-left"><div class="si-icon-wrap">🔒</div><div><div class="si-name">Mot de passe</div><div class="si-val">Modifier</div></div></div>
+              <div class="si-arrow">›</div>
+            </div>
+            <div class="setting-item">
+              <div class="si-left"><div class="si-icon-wrap">📤</div><div><div class="si-name">Exporter mes données</div><div class="si-val">CSV · JSON</div></div></div>
+              <div class="si-arrow">›</div>
+            </div>
+            <div class="logout-btn">Se déconnecter</div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label">Accueil</div></div>
+          <div class="nav-item"><div class="nav-icon">📋</div><div class="nav-label">Historique</div></div>
+          <div class="nav-add">+</div>
+          <div class="nav-item"><div class="nav-icon">📊</div><div class="nav-label">Stats</div></div>
+          <div class="nav-item active"><div class="nav-icon">⚙️</div><div class="nav-label">Profil</div></div>
+        </div>
+        <div class="bottom-bar"><div class="home-indicator"></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div style="text-align:center;color:var(--muted);font-size:10px;letter-spacing:2px;padding:20px 0 40px">BETTRACK · MAQUETTE COMPLÈTE V1.0 · TRACK · ANALYSE · STRATEGIZE</div>
+
+</body>
+</html>

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BetTrack — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d14;
+    --surface: #13131f;
+    --surface2: #1a1a2e;
+    --surface3: #1f1f35;
+    --purple: #7c3aed;
+    --purple-light: #a855f7;
+    --purple-glow: rgba(124, 58, 237, 0.3);
+    --accent: #c084fc;
+    --text: #f0eeff;
+    --muted: #6b6b8a;
+    --border: rgba(124, 58, 237, 0.2);
+    --success: #22d3ee;
+    --success-bg: rgba(34, 211, 238, 0.1);
+    --error: #f87171;
+    --error-bg: rgba(248, 113, 113, 0.1);
+    --warning: #fbbf24;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.12;
+    pointer-events: none;
+  }
+  .bg-orb-1 { width: 500px; height: 500px; background: var(--purple); top: -150px; left: -100px; }
+  .bg-orb-2 { width: 400px; height: 400px; background: #1d4ed8; bottom: -100px; right: -100px; }
+
+  .grid-overlay {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,58,237,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,58,237,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .phone {
+    width: 390px;
+    height: 844px;
+    background: var(--surface);
+    border-radius: 48px;
+    border: 1px solid var(--border);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.05),
+      0 40px 80px rgba(0,0,0,0.6),
+      0 0 60px var(--purple-glow);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  .notch {
+    width: 120px; height: 34px;
+    background: #000;
+    border-radius: 0 0 20px 20px;
+    margin: 0 auto;
+    flex-shrink: 0;
+    z-index: 10;
+  }
+
+  .screen {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+
+  /* Header */
+  .header {
+    padding: 16px 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    animation: fadeIn 0.5s 0.2s ease forwards;
+    opacity: 0;
+  }
+
+  .header-left {}
+
+  .greeting {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .username {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 4px 16px var(--purple-glow);
+    position: relative;
+  }
+
+  .avatar-notif {
+    position: absolute;
+    top: 0; right: 0;
+    width: 12px; height: 12px;
+    background: var(--error);
+    border-radius: 50%;
+    border: 2px solid var(--surface);
+  }
+
+  /* Bankroll card */
+  .bankroll-card {
+    margin: 20px 24px 0;
+    background: linear-gradient(135deg, #1e1040, #2d1b69);
+    border-radius: 28px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    box-shadow: 0 16px 40px rgba(124, 58, 237, 0.2);
+    animation: fadeIn 0.5s 0.3s ease forwards;
+    opacity: 0;
+  }
+
+  .bankroll-card::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(168,85,247,0.3), transparent);
+    border-radius: 50%;
+  }
+
+  .bankroll-card::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 150px; height: 150px;
+    background: radial-gradient(circle, rgba(124,58,237,0.2), transparent);
+    border-radius: 50%;
+  }
+
+  .bankroll-label {
+    font-size: 12px;
+    color: rgba(192, 132, 252, 0.8);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .bankroll-amount {
+    font-family: 'Syne', sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .bankroll-initial {
+    font-size: 13px;
+    color: rgba(192, 132, 252, 0.6);
+    margin-bottom: 20px;
+  }
+
+  .bankroll-stats {
+    display: flex;
+    gap: 16px;
+  }
+
+  .bankroll-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .bankroll-stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .bankroll-stat-val.positive { color: var(--success); }
+  .bankroll-stat-val.negative { color: var(--error); }
+
+  .bankroll-stat-label {
+    font-size: 11px;
+    color: rgba(192, 132, 252, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .bankroll-divider {
+    width: 1px;
+    background: rgba(124, 58, 237, 0.3);
+    margin: 0 4px;
+  }
+
+  /* Section title */
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 20px 24px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .section-link {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 24px;
+    animation: fadeIn 0.5s 0.4s ease forwards;
+    opacity: 0;
+  }
+
+  .stat-card {
+    background: var(--surface2);
+    border-radius: 20px;
+    padding: 18px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    opacity: 0.1;
+  }
+
+  .stat-card.roi::before { background: var(--success); }
+  .stat-card.winrate::before { background: var(--purple-light); }
+  .stat-card.profit::before { background: var(--success); }
+  .stat-card.bets::before { background: var(--warning); }
+
+  .stat-icon {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+
+  .stat-value.positive { color: var(--success); }
+  .stat-value.negative { color: var(--error); }
+  .stat-value.purple { color: var(--accent); }
+  .stat-value.warning { color: var(--warning); }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* Chart */
+  .chart-section {
+    padding: 0 24px;
+    animation: fadeIn 0.5s 0.5s ease forwards;
+    opacity: 0;
+  }
+
+  .chart-container {
+    background: var(--surface2);
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid var(--border);
+  }
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .chart-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .chart-filters {
+    display: flex;
+    gap: 6px;
+  }
+
+  .chart-filter {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: var(--muted);
+    background: var(--surface3);
+    cursor: pointer;
+  }
+
+  .chart-filter.active {
+    background: var(--purple);
+    color: white;
+  }
+
+  /* SVG Chart */
+  .chart-svg {
+    width: 100%;
+    height: 120px;
+  }
+
+  .chart-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .chart-label {
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  /* Bottom nav */
+  .bottom-nav {
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .nav-icon {
+    font-size: 22px;
+    filter: grayscale(1) opacity(0.4);
+    transition: all 0.3s ease;
+  }
+
+  .nav-item.active .nav-icon {
+    filter: none;
+  }
+
+  .nav-label {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .nav-item.active .nav-label {
+    color: var(--accent);
+  }
+
+  .nav-add {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 4px 20px var(--purple-glow);
+    margin-top: -20px;
+  }
+
+  .bottom-bar {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .home-indicator {
+    width: 120px; height: 5px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="grid-overlay"></div>
+
+<div class="phone">
+  <div class="notch"></div>
+
+  <div class="screen">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-left">
+        <div class="greeting">Bonjour 👋</div>
+        <div class="username">Mathieu</div>
+      </div>
+      <div class="avatar">
+        🧑
+        <div class="avatar-notif"></div>
+      </div>
+    </div>
+
+    <!-- Bankroll Card -->
+    <div class="bankroll-card">
+      <div class="bankroll-label">Bankroll actuelle</div>
+      <div class="bankroll-amount">2 340,50 $</div>
+      <div class="bankroll-initial">Départ : 2 000,00 $</div>
+      <div class="bankroll-stats">
+        <div class="bankroll-stat">
+          <div class="bankroll-stat-val positive">+340,50 $</div>
+          <div class="bankroll-stat-label">Profit total</div>
+        </div>
+        <div class="bankroll-divider"></div>
+        <div class="bankroll-stat">
+          <div class="bankroll-stat-val positive">+17,0 %</div>
+          <div class="bankroll-stat-label">Croissance</div>
+        </div>
+        <div class="bankroll-divider"></div>
+        <div class="bankroll-stat">
+          <div class="bankroll-stat-val">47</div>
+          <div class="bankroll-stat-label">Paris</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="section-title">
+      Statistiques
+      <span class="section-link">Ce mois</span>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card roi">
+        <div class="stat-icon">📈</div>
+        <div class="stat-value positive">+8,4 %</div>
+        <div class="stat-label">ROI</div>
+      </div>
+      <div class="stat-card winrate">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-value purple">61 %</div>
+        <div class="stat-label">Taux de réussite</div>
+      </div>
+      <div class="stat-card profit">
+        <div class="stat-icon">💰</div>
+        <div class="stat-value positive">+128,00 $</div>
+        <div class="stat-label">Profit ce mois</div>
+      </div>
+      <div class="stat-card bets">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-value warning">18</div>
+        <div class="stat-label">Paris ce mois</div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="section-title">Évolution bankroll</div>
+
+    <div class="chart-section">
+      <div class="chart-container">
+        <div class="chart-header">
+          <div class="chart-title">Historique</div>
+          <div class="chart-filters">
+            <div class="chart-filter">7J</div>
+            <div class="chart-filter active">1M</div>
+            <div class="chart-filter">3M</div>
+            <div class="chart-filter">1A</div>
+          </div>
+        </div>
+
+        <svg class="chart-svg" viewBox="0 0 320 120" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- Grid lines -->
+          <line x1="0" y1="30" x2="320" y2="30" stroke="rgba(124,58,237,0.1)" stroke-width="1"/>
+          <line x1="0" y1="60" x2="320" y2="60" stroke="rgba(124,58,237,0.1)" stroke-width="1"/>
+          <line x1="0" y1="90" x2="320" y2="90" stroke="rgba(124,58,237,0.1)" stroke-width="1"/>
+          <!-- Area fill -->
+          <path d="M0,90 L40,85 L80,75 L120,80 L160,60 L200,50 L240,40 L280,30 L320,20 L320,120 L0,120 Z"
+                fill="url(#chartGrad)"/>
+          <!-- Line -->
+          <path d="M0,90 L40,85 L80,75 L120,80 L160,60 L200,50 L240,40 L280,30 L320,20"
+                fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Dots -->
+          <circle cx="320" cy="20" r="5" fill="#c084fc" stroke="#1a1a2e" stroke-width="2"/>
+          <circle cx="160" cy="60" r="4" fill="#7c3aed" stroke="#1a1a2e" stroke-width="2"/>
+        </svg>
+
+        <div class="chart-labels">
+          <span class="chart-label">1 fév</span>
+          <span class="chart-label">8 fév</span>
+          <span class="chart-label">15 fév</span>
+          <span class="chart-label">22 fév</span>
+          <span class="chart-label">Auj.</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="height: 20px;"></div>
+
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">Accueil</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">📋</div>
+      <div class="nav-label">Historique</div>
+    </div>
+    <div class="nav-add">+</div>
+    <div class="nav-item">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">Stats</div>
+    </div>
+    <div class="nav-item">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">Profil</div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="home-indicator"></div>
+  </div>
+</div>
+
+</body>
+</html>
