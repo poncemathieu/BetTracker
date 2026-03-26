@@ -1,5 +1,6 @@
 package com.bettracker.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,6 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "bets")
@@ -23,6 +23,7 @@ public class Bet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -40,7 +41,7 @@ public class Bet {
     private LocalDate betDate;
 
     @Column(nullable = false)
-    private LocalTime betType;
+    private String betType;
 
     @Column(nullable = false)
     private String selection;

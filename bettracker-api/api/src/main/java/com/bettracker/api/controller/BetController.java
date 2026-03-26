@@ -1,5 +1,6 @@
 package com.bettracker.api.controller;
 
+import com.bettracker.api.dto.BetDTO;
 import com.bettracker.api.entity.Bet;
 import com.bettracker.api.repository.BetRepository;
 import com.bettracker.api.security.BetService;
@@ -18,17 +19,17 @@ public class BetController {
     private final BetService betService;
 
     @PostMapping
-    public ResponseEntity<Bet>  createBet(@Valid @RequestBody Bet bet) {
-        return ResponseEntity.ok(betService.createBet(bet));
+    public ResponseEntity<BetDTO>  createBet(@Valid @RequestBody BetDTO betDTO) {
+        return ResponseEntity.ok(betService.createBet(betDTO));
     }
 
     @GetMapping
-    public ResponseEntity<List<Bet>> getAllBets() {
+    public ResponseEntity<List<BetDTO>> getAllBets() {
         return ResponseEntity.ok(betService.getAllBets());
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Bet> updateBetStatus(@PathVariable long id, @Valid @RequestParam Bet.BetStatus betStatus) {
+    public ResponseEntity<BetDTO> updateBetStatus(@PathVariable long id, @Valid @RequestParam Bet.BetStatus betStatus) {
         return ResponseEntity.ok(betService.updateBetStatus(id, betStatus));
     }
 

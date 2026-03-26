@@ -1,7 +1,9 @@
 package com.bettracker.api.security;
 
+import com.bettracker.api.dto.BetDTO;
 import com.bettracker.api.entity.Bet;
 import com.bettracker.api.entity.User;
+import com.bettracker.api.mapper.BetMapper;
 import com.bettracker.api.repository.BetRepository;
 import com.bettracker.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ public class BetService {
 
     private final BetRepository betRepository;
     private final UserRepository userRepository;
+    private final BetMapper betMapper;
 
     private User getCurrentUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -23,22 +26,26 @@ public class BetService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    public Bet createBet(Bet bet) {
+    public BetDTO createBet(BetDTO betDTO) {
         User user = getCurrentUser();
+        Bet bet = betMapper.toEntity(betDTO);
         bet.setUser(user);
-        return betRepository.save(bet);
+        return betMapper.toBetDTO(betRepository.save(bet));
     }
 
-    public List<Bet> getAllBets() {
+    public List<BetDTO> getAllBets() {
         User user = getCurrentUser();
-        return betRepository.findByUserId(user.getId());
+        return betRepository.findByUserId(user.getId())
+                .stream()
+                .map(betMapper::toBetDTO)
+                .toList();
     }
 
-    public Bet updateBetStatus(Long betId, Bet.BetStatus status) {
+    public BetDTO updateBetStatus(Long betId, Bet.BetStatus status) {
         Bet bet = betRepository.findById(betId)
                 .orElseThrow(() -> new RuntimeException("Bet not found"));
         bet.setStatus(status);
-        return betRepository.save(bet);
+        return betMapper.toBetDTO(betRepository.save(bet));
     }
 
     public void deleteBet(Long betId) {
