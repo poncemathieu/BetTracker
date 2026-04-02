@@ -5,9 +5,13 @@ import { Colors } from '../../constants';
 import { GlobalStyles } from '../../constants/styles';
 import { useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useLogin } from '../../hooks/useAuth';
 
 export default function LoginScreen() {
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { mutate: login, isPending } = useLogin();
   return (
     <SafeAreaView style={GlobalStyles.screen}>
       <KeyboardAwareScrollView
@@ -46,6 +50,8 @@ export default function LoginScreen() {
                 autoCapitalize="none"
                 onFocus={() => setFocusedInput('email')}
                 onBlur={() => setFocusedInput(null)}
+                value={email}
+                onChangeText={setEmail}
               />
             </View>
 
@@ -58,6 +64,8 @@ export default function LoginScreen() {
                 secureTextEntry
                 onFocus={() => setFocusedInput('motDePasse')}
                 onBlur={() => setFocusedInput(null)}
+                value={password}
+                onChangeText={setPassword}
               />
             </View>
 
@@ -65,7 +73,7 @@ export default function LoginScreen() {
               <Text style={styles.forgot}>Mot de passe oublié ?</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={GlobalStyles.btnPrimary}>
+            <TouchableOpacity style={GlobalStyles.btnPrimary} onPress={() => login({email, password})}>
               <Text style={GlobalStyles.btnPrimaryText}>Se connecter</Text>
             </TouchableOpacity>
 

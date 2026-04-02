@@ -6,6 +6,7 @@ services:
       POSTGRES_DB: bettracker
       POSTGRES_USER: bettracker
       POSTGRES_PASSWORD: bettracker123
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5432:5432"
     volumes:

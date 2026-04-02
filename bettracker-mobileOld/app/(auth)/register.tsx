@@ -7,11 +7,31 @@ import { GlobalStyles } from "../../constants/styles";
 import React, { useState } from "react";
 //@ts-ignore
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useRegister } from "../../hooks/useAuth";
 
 export default function RegisterScreen() {
     const router = useRouter();
     const [accepted, setAccepted] = useState(false);
     const [focusedInput, setFocusedInput] = useState<string | null>(null);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const { mutate: register, isPending } = useRegister();
+
+    const handleRegister = () => {
+        if (!firstName || !email || !password || !lastName) {
+            alert('Veuillez remplir tous les champs');
+            return;
+        }
+        if (password !== confirmPassword) {
+            alert('Les mots de passe ne correspondent pas');
+            return;
+        }
+        register({ email, password, firstName: firstName, lastName: lastName });
+    }
     
     return (
         <SafeAreaView style={GlobalStyles.screen} edges={['top']}>
@@ -44,6 +64,8 @@ export default function RegisterScreen() {
                                     style={[GlobalStyles.input, focusedInput === 'firstName' && GlobalStyles.inputFocused]}
                                     placeholder="Votre prénom"
                                     placeholderTextColor={Colors.text3}
+                                    value={firstName}
+                                    onChangeText={setFirstName}
                                     onFocus={() => setFocusedInput('firstName')}
                                     onBlur={() => setFocusedInput(null)}
                                     />
@@ -54,6 +76,8 @@ export default function RegisterScreen() {
                                     style={[GlobalStyles.input, focusedInput === 'lastName' && GlobalStyles.inputFocused]}
                                     placeholder="Votre nom"
                                     placeholderTextColor={Colors.text3}
+                                    value={lastName}
+                                    onChangeText={setLastName}
                                     onFocus={() => setFocusedInput('lastName')}
                                     onBlur={() => setFocusedInput(null)}
                                     />
@@ -67,6 +91,8 @@ export default function RegisterScreen() {
                                         placeholder="Votre adresse email"
                                         placeholderTextColor={Colors.text3}
                                         keyboardType="email-address"
+                                        value={email}
+                                        onChangeText={setEmail}
                                         autoCapitalize="none"
                                         onFocus={() => setFocusedInput('email')}
                                         onBlur={() => setFocusedInput(null)}
@@ -78,7 +104,9 @@ export default function RegisterScreen() {
                                         style={[GlobalStyles.input, focusedInput === 'password' && GlobalStyles.inputFocused]}
                                         placeholder="Votre mot de passe"
                                         placeholderTextColor={Colors.text3}
-                                        secureTextEntry
+                                       // secureTextEntry
+                                        value={password}
+                                        onChangeText={setPassword}
                                         onFocus={() => setFocusedInput('password')}
                                         onBlur={() => setFocusedInput(null)}
                                     />
@@ -89,7 +117,9 @@ export default function RegisterScreen() {
                                         style={[GlobalStyles.input, focusedInput === 'confirmPassword' && GlobalStyles.inputFocused]}
                                         placeholder="Confirmez votre mot de passe"
                                         placeholderTextColor={Colors.text3}
-                                        secureTextEntry
+                                        //secureTextEntry
+                                        value={confirmPassword}
+                                        onChangeText={setConfirmPassword}
                                         onFocus={() => setFocusedInput('confirmPassword')}
                                         onBlur={() => setFocusedInput(null)}
                                     />
@@ -106,8 +136,11 @@ export default function RegisterScreen() {
                             </TouchableOpacity>
                             <View>
                             <TouchableOpacity 
-                                style={[GlobalStyles.btnPrimary, { marginBottom: 12 }, !accepted && {opacity: 0.5}]} disabled={!accepted}>
-                                <Text style={GlobalStyles.btnPrimaryText}>Créer un compte </Text>
+                                style={[GlobalStyles.btnPrimary, { marginBottom: 12 }, (!accepted || isPending) && {opacity: 0.5}]}
+                                disabled={!accepted || isPending} 
+                                onPress={handleRegister}>
+                                <Text style={GlobalStyles.btnPrimaryText}>
+                                    {isPending ? 'Création... ' : 'Créer un compte'} </Text>
                             </TouchableOpacity>
                             </View>
                             <View style={GlobalStyles.divider}>

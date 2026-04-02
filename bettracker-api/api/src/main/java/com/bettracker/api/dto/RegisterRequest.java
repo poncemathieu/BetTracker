@@ -21,9 +21,9 @@ public class RegisterRequest {
     @NotBlank
     private String password;
 
-    @NotBlank
+    //@NotBlank
     private String currency;
 
-    @NotNull
+    //@NotNull
     private BigDecimal initialBankroll;
 }

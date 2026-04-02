@@ -4,6 +4,7 @@ import { useState } from "react";
 import { GlobalStyles } from "../../constants/styles";
 import { Colors } from "../../constants";
 import { router } from "expo-router";
+import { useAuthStore } from "../../store/authStore";
 
 export default function ConfigScreen() {
     const [activeMontant, setActiveMontant] = useState<string>('');
@@ -15,6 +16,12 @@ export default function ConfigScreen() {
         USD: '$',
         GBP: '£',
     };
+    const setOnboardingCompleted = useAuthStore((s) => s.setOnboardingCompleted)
+
+    const handleFinish = () => {
+        setOnboardingCompleted()
+        router.replace('/(tabs)/dashboard')
+    }
     
     return (
         <SafeAreaView style={GlobalStyles.screen} edges={['top']}>
@@ -103,7 +110,7 @@ export default function ConfigScreen() {
             <View style={GlobalStyles.btnSection}>
                 <TouchableOpacity
                     style={GlobalStyles.btnPrimary}
-                    onPress={() => router.push('/(auth)/register')}
+                    onPress={handleFinish}
                 >
                     <Text style={GlobalStyles.btnPrimaryText}>✓ Commencer à tracker</Text>
                 </TouchableOpacity>

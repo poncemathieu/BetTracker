@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-community/datetimepicker": "8.6.0",
     "@tamagui/babel-plugin": "^2.0.0-rc.21",
     "@tamagui/config": "^2.0.0-rc.21",
     "@tamagui/core": "^2.0.0-rc.21",
+    "@tanstack/react-query": "^5.96.0",
+    "axios": "^1.14.0",
     "expo": "~55.0.4",
     "expo-constants": "~55.0.7",
     "expo-linear-gradient": "~55.0.8",
@@ -31,7 +34,8 @@
     "react-native-safe-area-context": "~5.6.2",
     "react-native-screens": "~4.23.0",
     "react-native-svg": "15.15.3",
-    "tamagui": "^2.0.0-rc.21"
+    "tamagui": "^2.0.0-rc.21",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
