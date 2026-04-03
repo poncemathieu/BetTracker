@@ -8,8 +8,8 @@ Application mobile de suivi et d'analyse de paris sportifs.
 - **React Native** avec Expo
 - **TypeScript**
 - **Expo Router** pour la navigation
-- **Zustand** pour le state management *(à venir)*
-- **React Query** pour les appels API *(à venir)*
+- **Zustand** pour le state management
+- **React Query** pour les appels API
 
 ### Backend
 - **Spring Boot 4.0** avec Java 21
